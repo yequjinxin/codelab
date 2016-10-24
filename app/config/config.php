@@ -9,4 +9,7 @@ $config = array(
             'db' => 'codelab',
         )
     ),
+    // weibo
+    'appKey' => '3416928080',
+    'appSecret' => 'c23eba5f81922a0b377f1b08c496f027',
 );

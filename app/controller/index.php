@@ -65,8 +65,10 @@ class Index extends \system\Controller {
             $proName = isset($_POST['name']) ? trim($_POST['name']) : '';
             $proType = isset($_POST['type']) ? trim($_POST['type']) : '';
             $proDesc = isset($_POST['desc']) ? trim($_POST['desc']) : '';
+            $now = date('Y-m-d H:i:s');
             // 生成项目记录
-            $id = $this->db->add("insert into project(name,type,status,description) values('$proName','$proType',1,'$proDesc')");
+            $id = $this->db->add("insert into project(name,type,status,description,create_time,update_time)
+                values('$proName','$proType',1,'$proDesc','$now','$now')");
             if (!empty($id)) {
                 $this->redirect('index.php?a=main&pro_id=' . $id);
             } else {
