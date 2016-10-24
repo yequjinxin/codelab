@@ -1,0 +1,73 @@
+body {
+    padding-top: 80px;
+    background: #fff url(../../public/image/noise.png);
+}
+
+.navbar {
+    font-family: STFangSong, Helvetica, Arial, Vernada, Tahoma, STXihei, "Microsoft YaHei", "Songti SC", SimSun, Heiti, sans-serif;
+}
+.nav_transparent_class {
+    filter:alpha(opacity=80);
+    -moz-opacity:0.8;
+    -khtml-opacity: 0.8;
+    opacity: 0.8;
+}
+#data-myword {
+    color: #fff;
+    text-shadow:2px 2px 20px #000;
+}
+
+.data-title:hover {
+    cursor: pointer;
+    background-color: #f5f5f5;
+}
+
+.data-title a {
+    display: block;
+    /* text-decoration: none;*/
+}
+
+.data-pager {
+    float: right;
+}
+/*
+.data-img-move {
+    position:relative;
+    top: -100px;
+}
+*/
+.data-content {
+    min-height: 400px;
+    margin-bottom: 50px;
+}
+.data-footer {
+    text-align: center;
+}
+
+.data-author {
+    color: #FFFFCC;
+    text-shadow:2px 2px 10px #000;
+}
+/*
+
+
+*/
+.float-right {
+    float: right;
+}
+.float-left {
+    float: left;
+}
+.float-right-1 {
+    float: right;
+    width: 100px;
+}
+.float-right-2 {
+    float: right;
+    width: 100px;
+    margin-left: 50px;
+}
+
+.red {
+    color: #CC6666;
+}

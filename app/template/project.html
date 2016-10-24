@@ -1,0 +1,94 @@
+{extends}base.html{extends}
+{header}
+{header}
+{content}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-2 col-xs-1">
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-10">
+                <button id="create-pro" type="button" class="btn btn-primary btn-sm float-right">
+                    <span class="glyphicon glyphicon-plus"></span> 添加项目
+                </button>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-2 col-xs-1">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-2 col-xs-1">
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-8 col-xs-10">
+                <?php 
+                if (empty($proList)) {
+                    echo '创建一个项目,开启你的实验之旅^^';
+                } else {
+                ?>
+                <div class="panel panel-default">
+                <!-- <div class="panel-heading">项目列表</div> -->
+                    <ul class="list-group">
+                        <?php foreach ($proList as $k => $v) { ?>
+                        <li class="list-group-item data-title">
+                            <a href="index.php?a=main&pro_id=<?php echo $v['id']; ?>"><?php echo $v['name'] ?>
+                                <span class="float-right-2"><?php echo $v['user']; ?></span>
+                                <span class="float-right-1"><?php echo substr($v['update_time'], 5); ?></span>
+                            </a>
+                        </li>
+                        <?php } ?>
+                    </ul>
+                </div>
+                <!-- pager-->
+                <div>
+                    <nav class="data-pager">
+                        <ul class="pagination">
+                            <?php 
+                                if ($pagerInfo['pagerNo'] === 1) {
+                                    echo '<li class="disabled"><a href="javascript:void(0)"><span>«</span></a></li>';
+                                } else {
+                                    echo '<li><a href="index.php?a=project&pager=1"><span>«</span></a></li>';
+                                }
+                            ?>
+
+                            <?php
+                                if ($pagerInfo['prePage'] === 0) {
+                                    echo '<li class="disabled"><a href="javascript:void(0)"><span>‹</span></a></li>';
+                                } else {
+                                    echo '<li><a href="index.php?a=project&pager=' . $pagerInfo['prePage'] . '"><span>‹</span></a></li>';
+                                }
+                            ?>
+                            <?php
+                                foreach ($pagerInfo['pagerList'] as $v) {
+                                    $classStr = '';
+                                    if ($pagerInfo['pagerNo'] === $v) {
+                                        $classStr = 'class="active"';
+                                    }
+                                    echo '<li ' . $classStr . '><a href="index.php?a=project&pager=' . $v . '">'. $v .'</a></li>';
+                                }
+                            ?>
+                            <?php
+                                if ($pagerInfo['nextPage'] === 0) {
+                                    echo '<li class="disabled"><a href="javascript:void(0)"><span>›</span></a></li>';
+                                } else {
+                                    echo '<li><a href="index.php?a=project&pager=' . $pagerInfo['nextPage'] . '"><span>›</span></a></li>';
+                                }
+                            ?>
+                            <?php
+                                if ($pagerInfo['pagerNo'] === $pagerInfo['totalPages']) {
+                                    echo '<li class="disabled"><a href="javascript:void(0)"><span aria-hidden="true">»</span></a></li>';
+                                } else {
+                                    echo '<li><a href="index.php?a=project&pager=' . $pagerInfo['totalPages'] . '"><span aria-hidden="true">»</span></a></li>';
+                                }
+                            ?>
+                        </ul>
+                    </nav>
+                </div>
+                <?php } ?>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-2 col-xs-1">
+            </div>
+        </div>
+    </div>
+{content}
+
+{footer}
+{footer}

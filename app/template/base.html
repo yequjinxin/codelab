@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>code_lab</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- weibo -->
+    <meta property="wb:webmaster" content="97b13e52588cb9b1" />
+    <link rel="shortcut icon" href="public/images/favicon.ico">
+
+    <link href="public/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="public/css/base.css" rel="stylesheet">
+    <script src="public/lib/jquery.min.js"></script>
+    <script src="public/lib/bootstrap/js/bootstrap.min.js"></script>
+
+    {header}
+</head>
+<body>
+    <nav role="navigation" class="navbar navbar-default navbar-fixed-top nav_transparent_class">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" data-toggle="collapse" data-target="#main-navbar-collapse" class="navbar-toggle collapsed">
+                    <span class="sr-only">toogle Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a id="data-myword" href="index.php?a=project" class="navbar-brand">code lab</a>
+            </div>
+            <div id="main-navbar-collapse" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li <?php if ($controller === 'project') { echo 'class="active"'; } ?>>
+                        <a href="index.php?a=project">
+                            <span class="glyphicon glyphicon-list"></span> 项目列表
+                        </a>
+                    </li>
+                    <li <?php if ($controller === 'about') { echo 'class="active"'; } ?>>
+                        <a href="index.php?a=about">
+                            <span class="glyphicon glyphicon-envelope"></span> 关于
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <span class="glyphicon glyphicon-cog"></span> 设置  <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">登录</a>
+                            </li>
+                            <li>
+                                <a href="#">登出</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="data-content">
+    {content}
+    </div>
+
+    <footer class="data-footer">
+        <p><small>© 2016 - codelab</small></p>
+        <p><small>powered by </small><strong class="data-author">ranlau</strong></p>
+    </footer>
+
+    <!-- 项目创建模态框开始 -->
+    <div id="modal-create-pro" class="modal fade" data-backdrop="static" data-keyboard="false" style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">创建项目</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="form-project" action="index.php?a=project" method="post">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span class="red">*</span>项目名称</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="name" placeholder="请填写项目名称" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span class="red">*</span>项目类型</label>
+                                <div class="col-sm-4">
+                                    <select name="type" class="form-control">
+                                        <option value="html">html</option>
+                                        <option value="javascript">javascript</option>
+                                        <option value="nodejs">nodejs</option>
+                                        <option value="php">php</option>
+                                        <option value="python">python</option>
+                                        <option value="c">c</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">项目描述</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="desc" placeholder="请填写项目描述" value="">
+                                </div>
+                            </div>
+                            <input type="hidden" name="subFlag" value="1">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="modal-btn-cancel" type="button" class="btn btn-default">取消</button>
+                    <button id="modal-btn-submit" type="button" class="btn btn-primary">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 项目创建模态框结束 -->
+    <!-- 信息模态框开始 -->
+    <div id="modal-msg" class="modal fade" data-backdrop="static" style="margin-top:100px;" data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">提示信息</h4>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-msg" type="button" class="btn btn-primary">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 信息模态框结束 -->
+    <script src="public/lib/require.js"></script>
+    <script>
+        requirejs.config({
+            'baseUrl': 'public/js',
+        });
+        requirejs(['baseExc'], function (baseExc) {
+            
+        });
+    </script>
+
+    {footer}
+</body>
+</html>

@@ -1,0 +1,191 @@
+{extends}base.html{extends}
+
+{header}
+    <!-- Create a simple CodeMirror instance -->
+    <link href="public/lib/codemirror/codemirror.css" rel="stylesheet">
+    <!-- theme -->
+    <link href="public/lib/codemirror/monokai.css" rel="stylesheet">
+    <link href="public/lib/codemirror/mdn-like.css" rel="stylesheet">
+
+    <script src="public/lib/codemirror/codemirror.js"></script>
+    <!-- <script src="public/lib/codemirror/sublime.js"></script>  -->
+    <script src="public/lib/codemirror/vim.js"></script>
+
+    <script src="public/lib/codemirror/xml.js"></script>
+    <script src="public/lib/codemirror/xml-fold.js"></script>
+    <script src="public/lib/codemirror/javascript.js"></script>
+    <script src="public/lib/codemirror/css.js"></script>
+    <script src="public/lib/codemirror/htmlmixed.js"></script>
+
+    <script src="public/lib/codemirror/clike.js"></script>
+    <script src="public/lib/codemirror/php.js"></script>
+
+    <script src="public/lib/codemirror/closebrackets.js"></script>
+    <script src="public/lib/codemirror/matchbrackets.js"></script>
+    <script src="public/lib/codemirror/matchtags.js"></script>
+    <script src="public/lib/codemirror/closetag.js"></script>
+    <script src="public/lib/codemirror/rulers.js"></script>
+    <script src="public/lib/codemirror/active-line.js"></script>
+
+    <!-- bootstrap treeview -->
+    <script src="public/lib/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+    <link href="public/lib/bootstrap-treeview/bootstrap-treeview.min.css" rel="stylesheet">
+
+    <link href="public/css/main.css" rel="stylesheet">
+{header}
+
+{content}
+    <div id="div-main">
+        <input id="pro-id" type="hidden" value="<?php echo empty($proId) ? '' : $proId; ?>">
+        <input id="pro-name" type="hidden" value="<?php echo empty($proName) ? '' : $proName; ?>">
+        <input id="pro-type" type="hidden" value="<?php echo empty($proType) ? '' : $proType; ?>">
+        <div class="row">
+            <div class="col-lg-offset-1 col-lg-10 form-horizontal">
+                <div class="form-group">
+                    <div class="col-xs-2">
+                        <select id="lang" class="form-control">
+                            <?php foreach ($langOption as $v) { ?>
+                            <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="col-xs-1">
+                        <button id="type-msg"
+                                type="button"
+                                class="btn btn-xs btn-primary"
+                                data-container="body"
+                                data-toggle="popover"
+                                data-placement="right"
+                                data-content="选择添加文件的类型">
+                            ?
+                        </button>
+                    </div>
+                    <div class="col-xs-4 float-right">
+                        <button id="btn-run" type="button" class="btn btn-primary float-right" style="margin-left:20px;">运行</button>
+                        <button id="btn-zoom" type="button" class="btn btn-default float-right">
+                            <span class="glyphicon glyphicon-zoom-in"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- <div style="clear:both;"></div> -->
+            <div class="col-lg-offset-1 col-lg-2">
+                <div class="browser-top">
+                    <!-- 
+                    <button id="btn-refresh-dir" type="button" class="btn btn-sm btn-default" title="刷新目录">
+                        <span class="glyphicon glyphicon-refresh"></span>
+                    </button>
+                     -->
+                    <button id="btn-add-dir" type="button" class="btn btn-sm btn-default" title="添加目录">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                    <button id="btn-edit-file" type="button" class="btn btn-sm btn-default" title="编辑文件名">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </button>
+                    <button id="btn-del-file" type="button" class="btn btn-sm btn-default" title="删除文件">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </div>
+                <div id="browser">
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="transparent_class mylayer"><span></span></div>
+                <ul id="code-tab" class="nav nav-tabs">
+                    <li id="code-add">
+                        <button type="button" class="btn btn-default">添加</button>   
+                    </li>
+                </ul>
+                <textarea id="code" style="display:none;"></textarea>
+            </div>
+        </div>
+    </div>
+    <div id="modal-zoom" class="col-sm-12">
+        <textarea id="codeZoom" style="display:none;"></textarea>
+    </div>
+    <!-- 添加目录开始 -->
+    <div id="modal-add-dir" class="modal fade" data-backdrop="static" data-keyboard="false" style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">添加目录</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">目录名称</label>
+                            <div class="col-sm-7">
+                                <input id="dir-name" type="text" class="form-control" placeholder="请填写目录名称" value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-cancel">取消</button>
+                    <button type="button" class="btn btn-primary btn-confirm">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 添加目录结束 -->
+    <!-- 删除文件模态框开始 -->
+    <div id="modal-del-file" class="modal fade" data-backdrop="static" data-keyboard="false" style="display:none;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">删除文件</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-12 control-label red" style="text-align:center;"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-cancel">取消</button>
+                    <button type="button" class="btn btn-primary btn-confirm">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 删除文件模态框结束 -->
+    <!-- 修改文件名模态框开始 -->
+    <!-- 
+    <div id="modal-edit-file" class="modal fade" data-backdrop="static" data-keyboard="false" style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">编辑文件名</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">名称</label>
+                            <div class="col-sm-7">
+                                <input id="" type="text" class="form-control" placeholder="请填写目录名称" value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-cancel">取消</button>
+                    <button type="button" class="btn btn-primary btn-confirm">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+     -->
+    <!-- 修改文件名模态框结束 -->
+{content}
+
+{footer}
+    <script>
+        requirejs(['codelab'], function (codelab) {
+            
+        });
+    </script>
+{footer}
+

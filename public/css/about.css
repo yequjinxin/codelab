@@ -1,0 +1,7 @@
+.about {
+    /* text-align: center; */
+    padding: 40px;
+    min-height: 500px;
+    word-wrap: break-word;
+    word-break: normal; /* break-all 可在单词内换行 */
+}
