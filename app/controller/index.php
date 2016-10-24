@@ -14,6 +14,13 @@ class Index extends \system\Controller {
         'c' => array('c', 'h'),
     );
 
+    /**
+     * 首页
+     */
+    function index() {
+        $this->project();
+    }
+
     function project() {
         if (!isset($_POST['subFlag'])) {
             $pagerNo = isset($_GET['pager']) ? intval($_GET['pager']) : 1;
@@ -68,6 +75,9 @@ class Index extends \system\Controller {
         }
     }
 
+    /**
+     * 项目控制台页面
+     */
     function main() {
         $proId = isset($_GET['pro_id']) ? intval($_GET['pro_id']) : '';
 
