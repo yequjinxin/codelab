@@ -3,6 +3,7 @@ $config = array(
     'debug' => true,
     'db' => array(
         'mysql' => array(
+            'driver' => 'mysqli',
             'user' => 'root',
             'pwd' => '',
             'host' => '127.0.0.1',
