@@ -2,9 +2,6 @@
  * tester
  */
 define(['lib', 'config', 'tab'], function (lib, config, tab) {
-//    $.ajaxSetup({  
-//        async : false  
-//    });
     var showMsg = lib.showMsg;
     var isEditFileName = config.isEditFileName;
 
@@ -78,4 +75,6 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
         tab.editorZoom.focus();
     });
 
+    return {
+    };
 });

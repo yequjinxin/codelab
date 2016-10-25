@@ -272,8 +272,9 @@ class Index extends \system\Controller {
             \app\lib\File::writeData(str_replace('\\', '/', $dir . $file), stripslashes($code));
         }
 
+        $config = get_config();
         $output = md5($proName . '_' . $proId);
-        $ret = system('E:/app/php/php.exe ' . $dir . 'index.php > ' . ROOT . "app/sandbox/output/{$output}.html");
+        $ret = system($config['exec']['php'] . ' ' . $dir . 'index.php > ' . ROOT . "app/sandbox/output/{$output}.html");
         echo 'sandbox.php?id=' . $output;
     }
 
