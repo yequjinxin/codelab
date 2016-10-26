@@ -12,8 +12,13 @@ define('ROOT', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 define('SYSTEM', ROOT . '../system/');
 require './init.php';
 
-$controller = empty($_GET['c']) ? 'index' : $_GET['c'];
+$controller = empty($_GET['c']) ? 'Index' : ucfirst($_GET['c']);
 $action = empty($_GET['a']) ? 'index' : $_GET['a'];
+
+// 为了方便回调
+if ($action === 'weiboCallback') {
+    $controller = 'User';
+}
 
 $objStr =  "\\app\\" . $controller;
 if (!class_exists($objStr)) {

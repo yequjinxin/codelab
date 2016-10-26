@@ -33,7 +33,7 @@
                         <?php foreach ($proList as $k => $v) { ?>
                         <li class="list-group-item data-title">
                             <a href="index.php?a=main&pro_id=<?php echo $v['id']; ?>"><?php echo $v['name'] ?>
-                                <span class="float-right-2"><?php echo $v['user']; ?></span>
+                                <span class="float-right-2"><?php echo $this->user['screen_name']; ?></span>
                                 <span class="float-right-1"><?php echo substr($v['update_time'], 5); ?></span>
                             </a>
                         </li>
@@ -91,8 +91,64 @@
             </div>
         </div>
     </div>
+    <!-- 项目创建模态框开始 -->
+    <div id="modal-create-pro" class="modal fade" data-backdrop="static" data-keyboard="false" style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">创建项目</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="form-project" action="index.php?a=project" method="post">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span class="red">*</span>项目名称</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="name" placeholder="请填写项目名称" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><span class="red">*</span>项目类型</label>
+                                <div class="col-sm-4">
+                                    <select name="type" class="form-control">
+                                        <option value="html">html</option>
+                                        <option value="javascript">javascript</option>
+                                        <option value="nodejs">nodejs</option>
+                                        <option value="php">php</option>
+                                        <option value="python">python</option>
+                                        <option value="c">c</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">项目描述</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="desc" placeholder="请填写项目描述" value="">
+                                </div>
+                            </div>
+                            <input type="hidden" name="subFlag" value="1">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="modal-btn-cancel" type="button" class="btn btn-default">取消</button>
+                    <button id="modal-btn-submit" type="button" class="btn btn-primary">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 项目创建模态框结束 -->
 {content}
 
 {footer}
+    <script src="public/lib/require.js"></script>
+    <script>
+        requirejs.config({
+            'baseUrl': 'public/js',
+        });
+        requirejs(['baseExc'], function (baseExc) {
+            
+        });
+    </script>
 {footer}
 

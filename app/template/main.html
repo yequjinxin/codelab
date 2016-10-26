@@ -40,37 +40,33 @@
         <input id="pro-name" type="hidden" value="<?php echo empty($proName) ? '' : $proName; ?>">
         <input id="pro-type" type="hidden" value="<?php echo empty($proType) ? '' : $proType; ?>">
         <div class="row">
-            <div class="col-lg-offset-1 col-lg-10 form-horizontal">
-                <div class="form-group">
-                    <div class="col-xs-2">
-                        <select id="lang" class="form-control">
-                            <?php foreach ($langOption as $v) { ?>
-                            <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="col-xs-1">
-                        <button id="type-msg"
-                                type="button"
-                                class="btn btn-xs btn-primary"
-                                data-container="body"
-                                data-toggle="popover"
-                                data-placement="right"
-                                data-content="选择添加文件的类型">
-                            ?
-                        </button>
-                    </div>
-                    <div class="col-xs-4 float-right">
-                        <button id="btn-run" type="button" class="btn btn-primary float-right" style="margin-left:20px;">运行</button>
-                        <button id="btn-zoom" type="button" class="btn btn-default float-right">
-                            <span class="glyphicon glyphicon-zoom-in"></span>
-                        </button>
-                    </div>
-                </div>
+            <div class="col-lg-offset-1 col-lg-2 col-xs-4">
+                <select id="lang" class="form-control">
+                    <?php foreach ($langOption as $v) { ?>
+                    <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="col-lg-1 col-xs-1">
+                <button id="type-msg"
+                        type="button"
+                        class="btn btn-xs btn-primary"
+                        data-container="body"
+                        data-toggle="popover"
+                        data-placement="right"
+                        data-content="选择添加文件的类型">
+                    ?
+                </button>
+            </div>
+            <div class="col-lg-7 col-xs-7">
+                <button id="btn-run" type="button" class="btn btn-primary float-right" style="margin-left:20px;">运行</button>
+                <button id="btn-zoom" type="button" class="btn btn-default float-right">
+                    <span class="glyphicon glyphicon-zoom-in"></span>
+                </button>
             </div>
         </div>
+        <br>
         <div class="row">
-            <!-- <div style="clear:both;"></div> -->
             <div class="col-lg-offset-1 col-lg-2">
                 <div class="browser-top">
                     <!-- 

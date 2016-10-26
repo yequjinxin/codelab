@@ -65,9 +65,15 @@ body {
 .float-right-2 {
     float: right;
     width: 100px;
-    margin-left: 50px;
+    margin-left: 20px;
 }
 
 .red {
     color: #CC6666;
+}
+
+.tip {
+    text-align:center;
+    color:#999999;
+    margin-top:50px;
 }

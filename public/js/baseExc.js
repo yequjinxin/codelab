@@ -6,10 +6,13 @@ define(['base'], function (base) {
         $('#modal-create-pro').modal('show');
     });
     $('#modal-btn-submit').click(function () {
-        if ($.trim($('input[name="name"]').val()) === '') {
-            base.showMsg('请填写项目名称');
-            return
+        var proName = $.trim($('input[name="name"]').val());
+        var mode = /[-,.?:;'"!`，。？：；‘“！·\s]/;
+        if (proName === '' || proName.length > 32 || mode.exec(proName)) {
+            base.showMsg('项目名称不能为空;不大于32个字符;不能包含标点符号、空格!');
+            return;
         }
+        $(this).button('loading');
         $('#form-project').submit();
     });
     $('#modal-btn-cancel').click(function () {

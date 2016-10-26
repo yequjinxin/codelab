@@ -1,7 +1,7 @@
 <?php
 namespace app;
 
-class Index extends \system\Controller {
+class Index extends \system\BaseController {
     /**
      * 项目类型匹配的文件后缀列表
      * 
@@ -21,14 +21,22 @@ class Index extends \system\Controller {
         $this->project();
     }
 
+    protected function getUserInfo() {
+        $typeId = $this->user['id'];
+        $user = $this->db->find("select * from user where type='weibo' and type_id='$typeId' and status not in (0,9)");
+        return $user;
+    }
+
     function project() {
         if (!isset($_POST['subFlag'])) {
             $pagerNo = isset($_GET['pager']) ? intval($_GET['pager']) : 1;
             $proPerPage = 10; // 每页显示几条记录
             $offset = ($pagerNo - 1) * $proPerPage;
 
+            $userInfo = $this->getUserInfo();
+            $userId = isset($userInfo[0]['id']) ? isset($userInfo[0]['id']) : 0;
             $proList = $this->db->find("select id,name,type,user,update_time from project
-                where status=1 order by update_time limit $offset,$proPerPage");
+                where user='$userId' and status=1 order by update_time limit $offset,$proPerPage");
 
             // 分页
             $totalPro = $this->db->find('select count(*) as total from project where status=1');
@@ -60,15 +68,23 @@ class Index extends \system\Controller {
                 'totalPages' => $totalPages,
             );
 
-            $this->display('project', array('proList' => $proList, 'pagerInfo' => $pagerInfo));
+            $this->display(
+                'project',
+                array(
+                   'proList' => $proList,
+                   'pagerInfo' => $pagerInfo,
+                )
+            );
         } else {
             $proName = isset($_POST['name']) ? trim($_POST['name']) : '';
             $proType = isset($_POST['type']) ? trim($_POST['type']) : '';
             $proDesc = isset($_POST['desc']) ? trim($_POST['desc']) : '';
             $now = date('Y-m-d H:i:s');
             // 生成项目记录
-            $id = $this->db->add("insert into project(name,type,status,description,create_time,update_time)
-                values('$proName','$proType',1,'$proDesc','$now','$now')");
+            $userInfo = $this->getUserInfo();
+            $userId = isset($userInfo[0]['id']) ? isset($userInfo[0]['id']) : 0;
+            $id = $this->db->add("insert into project(name,type,status,user,description,create_time,update_time)
+                values('$proName','$proType',1,'$userId','$proDesc','$now','$now')");
             if (!empty($id)) {
                 $this->redirect('index.php?a=main&pro_id=' . $id);
             } else {
@@ -95,7 +111,7 @@ class Index extends \system\Controller {
 
         $this->display(
             'main',
-             array(
+            array(
                 'proId' => $proId,
                 'proName' => $proName,
                 'proType' => $proType,
@@ -255,27 +271,33 @@ class Index extends \system\Controller {
     }
 
     function runPhp() {
-        $codes = isset($_POST['codes']) ? json_decode($_POST['codes'], true) : '';
-        $proId = isset($_POST['proId']) ? intval($_POST['proId']) : 0;
-        $proName = isset($_POST['proName']) ? trim($_POST['proName']) : '';
-
-        $dir = ROOT . 'app/sandbox/source/' . $proName . '_' . $proId . '/';
-
-        // 根据codes生成文件并执行
-        if (file_exists($dir)) {
-            // 删除目录内的所有内容
-            \app\lib\File::deleteDir($dir);
+        $userInfo = $this->getUserInfo();
+        if (isset($userInfo[0]['status']) && (int)$userInfo[0]['status'] === 2) {
+            $codes = isset($_POST['codes']) ? json_decode($_POST['codes'], true) : '';
+            $proId = isset($_POST['proId']) ? intval($_POST['proId']) : 0;
+            $proName = isset($_POST['proName']) ? trim($_POST['proName']) : '';
+            
+            $dir = ROOT . 'app/sandbox/source/' . $proName . '_' . $proId . '/';
+            
+            // 根据codes生成文件并执行
+            if (file_exists($dir)) {
+                // 删除目录内的所有内容
+                \app\lib\File::deleteDir($dir);
+            }
+            
+            // 代码都是经过转义的,因此这里需要反转义
+            foreach ($codes as $file => $code) {
+                \app\lib\File::writeData(str_replace('\\', '/', $dir . $file), stripslashes($code));
+            }
+            
+            $config = get_config();
+            $output = md5($proName . '_' . $proId);
+            $ret = system($config['exec']['php'] . ' ' . $dir . 'index.php > ' . ROOT . "app/sandbox/output/{$output}.html");
+            $url = 'sandbox.php?id=' . $output;
+            echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
+        } else {
+            echo json_encode(array('code' => 1, 'msg' => '当前用户没有运行权限'));
         }
-
-        // 代码都是经过转义的,因此这里需要反转义
-        foreach ($codes as $file => $code) {
-            \app\lib\File::writeData(str_replace('\\', '/', $dir . $file), stripslashes($code));
-        }
-
-        $config = get_config();
-        $output = md5($proName . '_' . $proId);
-        $ret = system($config['exec']['php'] . ' ' . $dir . 'index.php > ' . ROOT . "app/sandbox/output/{$output}.html");
-        echo 'sandbox.php?id=' . $output;
     }
 
     function saveCode() {

@@ -40,26 +40,49 @@
                             <span class="glyphicon glyphicon-envelope"></span> 关于
                         </a>
                     </li>
+                    <?php if (empty($this->user)) { ?>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <span class="glyphicon glyphicon-cog"></span> 设置  <span class="caret"></span>
+                            <span class="glyphicon glyphicon-log-in"></span> 登录  <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="#">登录</a>
+                                <a href="<?php echo $this->loginUrl['weibo']; ?>">微博</a>
                             </li>
                             <li>
-                                <a href="#">登出</a>
+                                <a href="#">QQ (开发中)</a>
+                            </li>
+                            <li>
+                                <a href="#">微信 (开发中)</a>
                             </li>
                         </ul>
                     </li>
+                    <?php } else { ?>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <!-- <span class="glyphicon glyphicon-cog"></span>  -->
+                            <?php echo $this->user['screen_name'] ?>  <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="index.php?c=user&a=logout">登出</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <?php } ?>
                 </ul>
             </div>
         </div>
     </nav>
 
     <div class="data-content">
-    {content}
+        <?php if (!empty($this->user)) { ?>
+        {content}
+        <?php } else { ?>
+        <div class="tip">
+            <span>请先登录^^</span>
+        </div>
+        <?php } ?>
     </div>
 
     <footer class="data-footer">
@@ -67,53 +90,6 @@
         <p><small>powered by </small><strong class="data-author">ranlau</strong></p>
     </footer>
 
-    <!-- 项目创建模态框开始 -->
-    <div id="modal-create-pro" class="modal fade" data-backdrop="static" data-keyboard="false" style="display:none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">创建项目</h4>
-                </div>
-                <div class="modal-body">
-                    <form id="form-project" action="index.php?a=project" method="post">
-                        <div class="form-horizontal">
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label"><span class="red">*</span>项目名称</label>
-                                <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="name" placeholder="请填写项目名称" value="">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label"><span class="red">*</span>项目类型</label>
-                                <div class="col-sm-4">
-                                    <select name="type" class="form-control">
-                                        <option value="html">html</option>
-                                        <option value="javascript">javascript</option>
-                                        <option value="nodejs">nodejs</option>
-                                        <option value="php">php</option>
-                                        <option value="python">python</option>
-                                        <option value="c">c</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">项目描述</label>
-                                <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="desc" placeholder="请填写项目描述" value="">
-                                </div>
-                            </div>
-                            <input type="hidden" name="subFlag" value="1">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button id="modal-btn-cancel" type="button" class="btn btn-default">取消</button>
-                    <button id="modal-btn-submit" type="button" class="btn btn-primary">确认</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- 项目创建模态框结束 -->
     <!-- 信息模态框开始 -->
     <div id="modal-msg" class="modal fade" data-backdrop="static" style="margin-top:100px;" data-keyboard="false">
         <div class="modal-dialog modal-sm">
@@ -130,15 +106,6 @@
         </div>
     </div>
     <!-- 信息模态框结束 -->
-    <script src="public/lib/require.js"></script>
-    <script>
-        requirejs.config({
-            'baseUrl': 'public/js',
-        });
-        requirejs(['baseExc'], function (baseExc) {
-            
-        });
-    </script>
 
     {footer}
 </body>

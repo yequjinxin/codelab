@@ -56,7 +56,12 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                     'index.php?&a=runPhp',
                     {codes: JSON.stringify(codes), proId: proId, proName: proName},
                     function (ret) {
-                        window.open(ret);
+                        ret = JSON.parse(ret);
+                        if (+ret.code === 0) {
+                            window.open(ret.data);
+                        } else if (+ret.code === 1) {
+                            lib.showMsg(ret.msg);
+                        }
                     }
                 );
                 break;
