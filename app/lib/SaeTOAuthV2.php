@@ -189,7 +189,7 @@ class SaeTOAuthV2 {
             $params['username'] = $keys['username'];
             $params['password'] = $keys['password'];
         } else {
-            throw new \app\lib\app\lib\OAuthException("wrong auth type");
+            throw new \app\lib\OAuthException("wrong auth type");
         }
 
         $response = $this->oAuthRequest($this->accessTokenURL(), 'POST', $params);
