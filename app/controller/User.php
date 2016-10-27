@@ -20,14 +20,13 @@ class User extends \system\Controller {
             $token = $o->getAccessToken('code', $keys) ;
         }
         if ($token) {
-            session_start();
             $_SESSION['token'] = $token;
             setcookie('weibojs_' . $o->client_id, http_build_query($token));
 
             $logInfo = $this->checkLogin();
             $this->user = $logInfo['user'];
             // 存储用户信息
-            if (!empty($this->user)) {
+            if (!empty($this->user) && !isset($this->user['error_code']) && !isset($this->user['error'])) {
                 $userId = $this->user['id'];
                 $user = $this->db->find("select * from user where type='weibo' and type_id='$userId'");
                 if (empty($user)) {
@@ -35,14 +34,15 @@ class User extends \system\Controller {
                     $image = $this->user['profile_image_url'];
                     $url = $this->user['profile_url'];
                     $res = $this->db->add("insert into user (type,type_id,name,image,url,status)
-                            values('weibo','$userId','$name','$image','$url',1)");
+                        values('weibo','$userId','$name','$image','$url',1)");
                     if (!$res) {
                         show_error('db error:' . $this->db->error(), '用户信息保存错误');
                     }
+                    $this->redirect('index.php');
                 }
+            } else {
+                echo '授权失败:' . $this->user['error'] . ':' . $this->user['error_code'];
             }
-
-            $this->redirect('index.php');
         } else {
             echo '授权失败';
         }

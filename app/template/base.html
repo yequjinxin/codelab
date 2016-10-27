@@ -40,7 +40,7 @@
                             <span class="glyphicon glyphicon-envelope"></span> 关于
                         </a>
                     </li>
-                    <?php if (empty($this->user)) { ?>
+                    <?php if (!$this->isLogin) { ?>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <span class="glyphicon glyphicon-log-in"></span> 登录  <span class="caret"></span>
@@ -76,7 +76,7 @@
     </nav>
 
     <div class="data-content">
-        <?php if (!empty($this->user)) { ?>
+        <?php if ($this->isLogin) { ?>
         {content}
         <?php } else { ?>
         <div class="tip">
