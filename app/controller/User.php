@@ -38,8 +38,8 @@ class User extends \system\Controller {
                     if (!$res) {
                         show_error('db error:' . $this->db->error(), '用户信息保存错误');
                     }
-                    $this->redirect('index.php');
                 }
+                $this->redirect('index.php');
             } else {
                 echo '授权失败:' . $this->user['error'] . ':' . $this->user['error_code'];
             }

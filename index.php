@@ -9,7 +9,7 @@
 namespace main;
 
 define('ROOT', dirname(__FILE__) . DIRECTORY_SEPARATOR);
-define('SYSTEM', ROOT . './system/');
+define('SYSTEM', ROOT . 'system/');
 require './init.php';
 
 $controller = empty($_GET['c']) ? 'Index' : ucfirst($_GET['c']);
