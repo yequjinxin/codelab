@@ -47,7 +47,8 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="<?php echo $this->loginUrl['weibo']; ?>">微博</a>
+                                <a href="<?php echo $this->loginUrl['weibo']; ?>">微博
+                                </a>
                             </li>
                             <li>
                                 <a href="#">QQ (开发中)</a>
@@ -81,6 +82,11 @@
         <?php } else { ?>
         <div class="tip">
             <span>请先登录^^</span>
+            <!--
+            <a href="<?php echo $this->loginUrl['weibo']; ?>">
+                <img src="http://img.t.sinajs.cn/t4/appstyle/open/images/website/loginbtn/loginbtn_04.png" alt="" id="btnStyleImg1">
+            </a>
+            -->
         </div>
         <?php } ?>
     </div>

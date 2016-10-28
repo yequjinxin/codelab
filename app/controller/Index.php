@@ -34,7 +34,7 @@ class Index extends \system\BaseController {
             $offset = ($pagerNo - 1) * $proPerPage;
 
             $userInfo = $this->getUserInfo();
-            $userId = isset($userInfo[0]['id']) ? isset($userInfo[0]['id']) : 0;
+            $userId = isset($userInfo[0]['id']) ? $userInfo[0]['id'] : 0;
             $proList = $this->db->find("select id,name,type,user,update_time from project
                 where user='$userId' and status=1 order by update_time limit $offset,$proPerPage");
 
