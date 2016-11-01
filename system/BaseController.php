@@ -11,6 +11,7 @@ class BaseController extends Controller {
         } else {
            $this->isLogin = true;
         }
+
         if (!$this->isLogin) {
            $this->redirect('index.php?c=user&a=login');
         }

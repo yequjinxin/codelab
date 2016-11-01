@@ -1,7 +1,7 @@
 <?php 
 
-$id = isset($_GET['id']) ? $_GET['id'] : '';
-$file = "./app/sandbox/output/{$id}.html";
+$name = isset($_GET['name']) ? $_GET['name'] : '';
+$file = "./app/sandbox/{$name}/output/{$name}.html";
 
 if (file_exists($file)) {
     include $file;

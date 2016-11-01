@@ -276,25 +276,24 @@ class Index extends \system\BaseController {
             $codes = isset($_POST['codes']) ? json_decode($_POST['codes'], true) : '';
             $proId = isset($_POST['proId']) ? intval($_POST['proId']) : 0;
             $proName = isset($_POST['proName']) ? trim($_POST['proName']) : '';
-            
-            $dir = ROOT . 'app/sandbox/source/' . $proName . '_' . $proId . '/';
-            
+
+            $identifier = $proName . '_' . $proId;
+            $dir = ROOT . "app/sandbox/{$identifier}/source/";
             // 根据codes生成文件并执行
             if (file_exists($dir)) {
                 // 删除目录内的所有内容
                 \app\lib\File::deleteDir($dir);
             }
-            
+
             // 代码都是经过转义的,因此这里需要反转义
             foreach ($codes as $file => $code) {
                 \app\lib\File::writeData(str_replace('\\', '/', $dir . $file), stripslashes($code));
             }
-            
-            $config = get_config();
-            $output = md5($proName . '_' . $proId);
-            $ret = system($config['exec']['php'] . ' ' . $dir . 'index.php > ' . ROOT . "app/sandbox/output/{$output}.html");
-            $url = 'sandbox.php?id=' . $output;
-            echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
+            $ret = system("docker run -v /usr/local/www/online/codelab/app/sandbox/{$proName}:/root/data/codelab/{$proName} yequjinxin/php:v1.00 php /root/script/exec_code.php {$proName}");
+            if (!$ret) {
+                $url = "sandbox.php?name={$identifier}";
+                echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
+            }
         } else {
             echo json_encode(array('code' => 1, 'msg' => '当前用户没有运行权限'));
         }

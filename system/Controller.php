@@ -21,14 +21,14 @@ class Controller {
         $logInfo = $this->checkLogin();
         $this->user = $logInfo['user'];
         $this->loginUrl = $logInfo['loginUrl'];
-	$this->loginType = $logInfo['loginType'];
+        $this->loginType = $logInfo['loginType'];
     }
 
     // 目前只有微博
     function checkLogin() {
         $token = isset($_SESSION['token']) ? $_SESSION['token'] : '';
-        $loginUrl['weibo'] = \app\lib\Login::getWeiboUrl();        
-        $loginType = 'weibo';        
+        $loginUrl['weibo'] = \app\lib\Login::getWeiboUrl();
+        $loginType = 'weibo';
         if (empty($token)) {
             $user = '';
         } else {
