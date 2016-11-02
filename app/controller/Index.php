@@ -289,10 +289,13 @@ class Index extends \system\BaseController {
             foreach ($codes as $file => $code) {
                 \app\lib\File::writeData(str_replace('\\', '/', $dir . $file), stripslashes($code));
             }
-            $ret = system("docker run -v /usr/local/www/online/codelab/app/sandbox/{$proName}:/root/data/codelab/{$proName} yequjinxin/php:v1.00 php /root/script/exec_code.php {$proName}");
-            if (!$ret) {
+            $execStr =  "docker run -v /usr/local/www/online/codelab/app/sandbox/{$identifier}:/root/data/codelab/{$identifier} yequjinxin/php:v1.00 php /root/script/exec_code.php {$identifier}";
+            $ret = system($execStr);
+            if ($ret !== false) {
                 $url = "sandbox.php?name={$identifier}";
                 echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
+            } else {
+                echo json_encode(array('code' => 2, 'msg' => 'run error'));
             }
         } else {
             echo json_encode(array('code' => 1, 'msg' => '当前用户没有运行权限'));
