@@ -38,6 +38,7 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
     $('#type-msg').popover({trigger: 'hover'});
     // 运行程序
     $('#btn-run').click(function () {
+        $(this).button('loading');
         var lang = $('#pro-type').val();
         $code = tab.editor.getValue();
         switch (lang) {
@@ -62,6 +63,7 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                         } else if (+ret.code === 1) {
                             lib.showMsg(ret.msg);
                         }
+                        $('#btn-run').button('reset');
                     }
                 );
                 break;
