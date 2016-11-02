@@ -276,6 +276,7 @@ class Index extends \system\BaseController {
             $codes = isset($_POST['codes']) ? json_decode($_POST['codes'], true) : '';
             $proId = isset($_POST['proId']) ? intval($_POST['proId']) : 0;
             $proName = isset($_POST['proName']) ? trim($_POST['proName']) : '';
+            $type = isset($_POST['type']) ? trim($_POST['type']) : '';
 
             $identifier = $proName . '_' . $proId;
             $dir = ROOT . "app/sandbox/{$identifier}/source/";
@@ -289,17 +290,21 @@ class Index extends \system\BaseController {
             foreach ($codes as $file => $code) {
                 \app\lib\File::writeData(str_replace('\\', '/', $dir . $file), stripslashes($code));
             }
-            $execStr =  "docker run -v /usr/local/www/online/codelab/app/sandbox/{$identifier}:/root/data/codelab/{$identifier} yequjinxin/php:v1.00 php /root/script/exec_code.php {$identifier}";
-            $ret = system($execStr);
-            if ($ret !== false) {
-                // 清空container
-                system("docker stop $(docker ps -a -q)");
-                system("docker rm $(docker ps -a -q)");
-                ob_clean();
-                $url = "sandbox.php?name={$identifier}";
+            $url = "sandbox.php?name={$identifier}&type={$type}";
+            if ($type === 'php') {
+                $execStr =  "docker run -v /usr/local/www/online/codelab/app/sandbox/{$identifier}:/root/data/codelab/{$identifier} yequjinxin/php:v1.00 php /root/script/exec_code.php {$identifier}";
+                $ret = system($execStr);
+                if ($ret !== false) {
+                    // 清空container
+                    system("docker stop $(docker ps -a -q)");
+                    system("docker rm $(docker ps -a -q)");
+                    ob_clean();
+                    echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
+                } else {
+                    echo json_encode(array('code' => 2, 'msg' => 'run error'));
+                }
+            } else if ($type === 'html') {
                 echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
-            } else {
-                echo json_encode(array('code' => 2, 'msg' => 'run error'));
             }
         } else {
             echo json_encode(array('code' => 1, 'msg' => '当前用户没有运行权限'));

@@ -54,7 +54,7 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                 }
                 $.post(
                     'index.php?&a=runPhp',
-                    {codes: JSON.stringify(codes), proId: proId, proName: proName},
+                    {codes: JSON.stringify(codes), proId: proId, proName: proName, type: lang},
                     function (ret) {
                         ret = JSON.parse(ret);
                         if (+ret.code === 0) {
