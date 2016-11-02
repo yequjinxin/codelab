@@ -292,6 +292,10 @@ class Index extends \system\BaseController {
             $execStr =  "docker run -v /usr/local/www/online/codelab/app/sandbox/{$identifier}:/root/data/codelab/{$identifier} yequjinxin/php:v1.00 php /root/script/exec_code.php {$identifier}";
             $ret = system($execStr);
             if ($ret !== false) {
+                // 清空container
+                system("docker stop $(docker ps -a -q)");
+                system("docker rm $(docker ps -a -q)");
+                ob_clean();
                 $url = "sandbox.php?name={$identifier}";
                 echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
             } else {
