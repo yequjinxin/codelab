@@ -41,20 +41,21 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
         $(this).button('loading');
         var lang = $('#pro-type').val();
         $code = tab.editor.getValue();
+        var codes = {};
+        for (var k in config.nameMap) {
+            if (config.nameMap.hasOwnProperty(k)) {
+                codes[k] = config.nameMap[k].codes;
+            }
+        }
         switch (lang) {
-            case 'javascript':
-                eval($code);
-                break;
+//            case 'javascript':
+//                eval($code);
+//                break;
             case 'html':
             case 'php':
-                var codes = {};
-                for (var k in config.nameMap) {
-                    if (config.nameMap.hasOwnProperty(k)) {
-                        codes[k] = config.nameMap[k].codes;
-                    }
-                }
+            case 'c':
                 $.post(
-                    'index.php?&a=runPhp',
+                    'index.php?a=runCode',
                     {codes: JSON.stringify(codes), proId: proId, proName: proName, type: lang},
                     function (ret) {
                         ret = JSON.parse(ret);
@@ -66,9 +67,6 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                         $('#btn-run').button('reset');
                     }
                 );
-                break;
-            case 'c':
-                
                 break;
         }
     });

@@ -270,7 +270,7 @@ class Index extends \system\BaseController {
         return $browser;
     }
 
-    function runPhp() {
+    function runCode() {
         $userInfo = $this->getUserInfo();
         if (isset($userInfo[0]['status']) && (int)$userInfo[0]['status'] === 2) {
             $codes = isset($_POST['codes']) ? json_decode($_POST['codes'], true) : '';
@@ -292,12 +292,12 @@ class Index extends \system\BaseController {
             }
             $url = "sandbox.php?name={$identifier}&type={$type}";
             if ($type === 'php') {
-                $execStr =  "docker run -v /usr/local/www/online/codelab/app/sandbox/{$identifier}:/root/data/codelab/{$identifier} yequjinxin/php:v1.00 php /root/script/exec_code.php {$identifier}";
+                $execStr = "docker run -v /usr/local/www/online/codelab/app/sandbox/{$identifier}:/root/data/codelab/{$identifier} yequjinxin/php:v1.00 php /root/script/exec_code.php {$identifier}";
                 $ret = system($execStr);
                 if ($ret !== false) {
                     // 清空container
-                    system("docker stop $(docker ps -a -q)");
-                    system("docker rm $(docker ps -a -q)");
+                    // system("docker stop $(docker ps -a -q)");
+                    // system("docker rm $(docker ps -a -q)");
                     ob_clean();
                     echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
                 } else {
@@ -305,6 +305,15 @@ class Index extends \system\BaseController {
                 }
             } else if ($type === 'html') {
                 echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
+            } else if ($type === 'c') {
+                $execStr = "docker run -v /usr/local/www/online/codelab/app/sandbox/{$identifier}:/root/data/codelab/{$identifier} -d -p 10443:10443 yequjinxin/gateone:v1.00 /root/run.sh";
+                $ret = system($execStr);
+                if ($ret !== false) {
+                    ob_clean();
+                    echo json_encode(array('code' => 0, 'msg' => ''));
+                } else {
+                    echo json_encode(array('code' => 2, 'msg' => 'run error'));
+                }
             }
         } else {
             echo json_encode(array('code' => 1, 'msg' => '当前用户没有运行权限'));
