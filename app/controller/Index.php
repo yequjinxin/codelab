@@ -306,7 +306,7 @@ class Index extends \system\BaseController {
             } else if ($type === 'html') {
                 echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
             } else if ($type === 'c') {
-                $execStr = "docker run -v /usr/local/www/online/codelab/app/sandbox/{$identifier}:/root/data/codelab/{$identifier} -d -p 10443:10443 yequjinxin/gateone:v1.00 source /root/run.sh {$identifier}";
+                $execStr = "docker run -v /usr/local/www/online/codelab/app/sandbox/{$identifier}/source:/root/{$proName} -d -p 10443:10443 yequjinxin/gateone:v1.00 /bin/sh -c '/usr/local/bin/run.sh {$identifier}'";
                 $ret = system($execStr);
                 if ($ret !== false) {
                     ob_clean();
