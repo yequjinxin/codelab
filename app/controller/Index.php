@@ -318,7 +318,7 @@ class Index extends \system\BaseController {
                     ob_clean();
                     $now = date('Y-m-d H:i:s');
                     $id = $gateone[0]['id'];
-                    $this->db->update("update gateone set status=1,proId=$proId,begin_time=$now where id=$id");
+                    $this->db->update("update gateone set status=1,proId='$proId',begin_time='$now' where id='$id'");
                     echo json_encode(array('code' => 0, 'msg' => '', 'port' => $port));
                 } else {
                     echo json_encode(array('code' => 2, 'msg' => 'run error'));
