@@ -306,11 +306,20 @@ class Index extends \system\BaseController {
             } else if ($type === 'html') {
                 echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
             } else if ($type === 'c') {
-                $execStr = "docker run -v /usr/local/www/online/codelab/app/sandbox/{$identifier}/source:/root/{$proName} -d -p 10443:10443 yequjinxin/gateone:v1.00 /bin/sh -c '/usr/local/bin/run.sh {$identifier}'";
+                $gateone = $this->db->find('select id,port from gateone where status=0 limit 1');
+                if (empty($gateone[0])) {
+                    echo json_encode(array('code' => 3, 'msg' => ''));
+                    exit;
+                }
+                $port = $gateone[0]['port'];
+                $execStr = "docker run -v /usr/local/www/online/codelab/app/sandbox/{$identifier}/source:/root/{$proName} -d -p $port:$port yequjinxin/gateone:v1.00 /bin/sh -c '/usr/local/bin/run.sh $port'";
                 $ret = system($execStr);
                 if ($ret !== false) {
                     ob_clean();
-                    echo json_encode(array('code' => 0, 'msg' => ''));
+                    $now = date('Y-m-d H:i:s');
+                    $id = $gateone[0]['id'];
+                    $this->db->update("update gateone set status=1,proId=$proId,begin_time=$now where id=$id");
+                    echo json_encode(array('code' => 0, 'msg' => '', 'port' => $port));
                 } else {
                     echo json_encode(array('code' => 2, 'msg' => 'run error'));
                 }

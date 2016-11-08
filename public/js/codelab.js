@@ -48,9 +48,6 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
             }
         }
         switch (lang) {
-//            case 'javascript':
-//                eval($code);
-//                break;
             case 'html':
             case 'php':
             case 'c':
@@ -60,7 +57,11 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                     function (ret) {
                         ret = JSON.parse(ret);
                         if (+ret.code === 0) {
-                            window.open(ret.data);
+                            if (lang === 'c') {
+                                window.open('http://123.56.144.238:' + ret.port + '/?ssh=ssh://root@localhost/');
+                            } else {
+                                window.open(ret.data);
+                            }
                         } else if (+ret.code === 1) {
                             lib.showMsg(ret.msg);
                         }
