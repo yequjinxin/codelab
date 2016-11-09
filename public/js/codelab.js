@@ -66,6 +66,7 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                                     $('#btn-run').button('reset');
                                     $('#btn-run').hide();
                                     $('#btn-stop').show();
+                                    $('#div-btn-run').show();
                                 }, 2000);
                             } else {
                                 containerSrc = ret.data;
@@ -92,6 +93,7 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                 $('#btn-stop').button('reset');
                 $('#btn-stop').hide();
                 $('#btn-run').show();
+                $('#div-btn-run').hide();
             } else {
                 lib.showMsg(ret.msg);
             }
