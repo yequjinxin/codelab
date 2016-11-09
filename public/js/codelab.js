@@ -65,7 +65,7 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                                     containSwitch(false);
                                     $('#btn-run').hide();
                                     $('#btn-stop').show();
-                                }(), 2000);
+                                }, 2000);
                             } else {
                                 containerSrc = ret.data;
                                 $('#div-run iframe').attr('src', containerSrc);
@@ -81,14 +81,16 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
     });
 
     $('#btn-stop').click(function () {
+        $(this).button('loading');
+        containSwitch(true);
         var proId = $('#pro-id').val();
         var proName = $('#pro-name').val();
         $.post('index.php?a=stopContainer', {proId, proId, proName: proName}, function (ret) {
             ret = JSON.parse(ret);
             if (+ret.code === 0) {
-                $('#btn-run').show();
+                $('#btn-stop').button('reset');
                 $('#btn-stop').hide();
-                containSwitch(true);
+                $('#btn-run').show();
             } else {
                 lib.showMsg(ret.msg);
             }
