@@ -292,7 +292,7 @@ class Index extends \system\BaseController {
             }
             $url = "sandbox.php?name={$identifier}&type={$type}";
             if ($type === 'php') {
-                $execStr = "docker run -v /usr/local/www/online/codelab/app/sandbox/{$identifier}:/root/data/codelab/{$identifier} yequjinxin/php:v1.00 php /root/script/exec_code.php {$identifier}";
+                $execStr = "docker run -v " . ROOT . "app/sandbox/{$identifier}:/root/data/codelab/{$identifier} yequjinxin/php:v1.00 php /root/script/exec_code.php {$identifier}";
                 $ret = system($execStr);
                 if ($ret !== false) {
                     // 清空container
@@ -312,7 +312,7 @@ class Index extends \system\BaseController {
                     exit;
                 }
                 $port = $gateone[0]['port'];
-                $execStr = "docker run -v /usr/local/www/online/codelab/app/sandbox/{$identifier}/source:/root/{$proName} -d -p $port:$port yequjinxin/gateone:v1.00 /bin/sh -c '/usr/local/bin/run.sh $port'";
+                $execStr = "docker run -v " . ROOT . "app/sandbox/{$identifier}/source:/root/{$proName} -d -p $port:$port yequjinxin/gateone:v1.00 /bin/sh -c '/usr/local/bin/run.sh $port'";
                 $ret = system($execStr);
                 if ($ret !== false) {
                     ob_clean();
@@ -329,13 +329,35 @@ class Index extends \system\BaseController {
         }
     }
 
+    private function getFIleListById($fileList, $parentId) {
+        $ret = array();
+        foreach ($fileList as $k => $v) {
+            if ($v['id'] == $parentId) {
+                $ret[] = $v['name'];
+                $retParent = $this->getFIleListById($fileList, $v['parentId']);
+                if (!empty($retParent)) {
+                    $ret = array_merge($ret, $retParent);
+                }
+                break;
+            }
+        }
+        return $ret;
+    }
+
     function saveCode() {
         $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
         $fileName = isset($_POST['fileName']) ? trim($_POST['fileName']) : '';
         $type = isset($_POST['type']) ? trim($_POST['type']) : '';
         $content = isset($_POST['content']) ? trim($_POST['content']) : '';
         $proId = isset($_POST['proId']) ? intval($_POST['proId']) : '';
+        $proName = isset($_POST['proName']) ? intval($_POST['proName']) : '';
         $parentId = isset($_POST['parentId']) ? intval($_POST['parentId']) : 0;
+
+        $fileList = $this->db->find("select * from file where pro_id='$proId'");
+        $filePath = $this->getFIleListById($fileList, $parentId);
+        array_unshift($filePath, $fileName);
+        $identify = $proName . '_' . $proId;
+        \app\lib\File::writeData($filePath, $content, $identify);
 
         $now = date('Y-m-d H:i:s');
         if (empty($id)) {

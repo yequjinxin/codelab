@@ -76,13 +76,14 @@ define(['config', 'lib'], function (config, lib) {
             }
             var content = editor.getValue();
             var proId = $('#pro-id').val();
+            var proName = $('#pro-name').val();
             var parentId = getParentId();
 
             $('.mylayer span').text('页面保存中...');
             $('.mylayer').show();
             $.post(
                 'index.php?&a=saveCode',
-                {id: id, fileName: name, proId: proId,parentId: parentId, type: fileType, content: content},
+                {id: id, fileName: name, proId: proId,parentId: parentId, type: fileType, content: content, proName: },
                 function (ret) {
                     ret = JSON.parse(ret);
                     $('.mylayer').hide();

@@ -29,6 +29,15 @@ class File {
             mkdir($dir);
         }
     }
+
+    static function writeFile($filePath, $content, $identify) {
+        $dir = ROOT . 'app/sandbox/' . $identify . '/source';
+        $filePath = array_reverse($filePath);
+        foreach ($filePath as $v) {
+            $dir .= '/' . $v;
+        }
+        file_put_contents($dir, $content);
+    }
 }
 
 ?>
