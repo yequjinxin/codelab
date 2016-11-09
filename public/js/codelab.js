@@ -63,17 +63,18 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                                 $('#div-run iframe').attr('src', containerSrc);
                                 setTimeout(function () {
                                     containSwitch(false);
+                                    $('#btn-run').button('reset');
                                     $('#btn-run').hide();
                                     $('#btn-stop').show();
                                 }, 2000);
                             } else {
                                 containerSrc = ret.data;
                                 $('#div-run iframe').attr('src', containerSrc);
+                                $('#btn-run').button('reset');
                             }
                         } else {
                             lib.showMsg(ret.msg);
                         }
-                        $('#btn-run').button('reset');
                     }
                 );
                 break;
