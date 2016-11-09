@@ -85,6 +85,7 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
     $('#btn-stop').click(function () {
         $(this).button('loading');
         containSwitch(true);
+        $('#div-btn-run').hide();
         var proId = $('#pro-id').val();
         var proName = $('#pro-name').val();
         $.post('index.php?a=stopContainer', {proId, proId, proName: proName}, function (ret) {
@@ -93,7 +94,6 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                 $('#btn-stop').button('reset');
                 $('#btn-stop').hide();
                 $('#btn-run').show();
-                $('#div-btn-run').hide();
             } else {
                 lib.showMsg(ret.msg);
             }
