@@ -350,7 +350,7 @@ class Index extends \system\BaseController {
         $type = isset($_POST['type']) ? trim($_POST['type']) : '';
         $content = isset($_POST['content']) ? trim($_POST['content']) : '';
         $proId = isset($_POST['proId']) ? intval($_POST['proId']) : '';
-        $proName = isset($_POST['proName']) ? intval($_POST['proName']) : '';
+        $proName = isset($_POST['proName']) ? trim($_POST['proName']) : '';
         $parentId = isset($_POST['parentId']) ? intval($_POST['parentId']) : 0;
 
         $fileList = $this->db->find("select * from file where pro_id='$proId'");
