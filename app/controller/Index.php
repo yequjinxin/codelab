@@ -270,6 +270,20 @@ class Index extends \system\BaseController {
         return $browser;
     }
 
+    function stopContainer() {
+        $proId = isset($_POST['proId']) ? intval($_POST['proId']) : 0;
+        $proName = isset($_POST['proName']) ? trim($_POST['proName']) : '';
+        $identifier = $proName . '_' . $proId;
+        $execStr = "docker stop $identifier";
+        $ret = system($execStr);
+        if ($ret !== false) {
+            ob_clean();
+            echo json_encode(array(code => 0, 'msg' => ''));
+        } else {
+            echo json_encode(array(code => 1, 'msg' => 'stop failed'));
+        }
+    }
+
     function runCode() {
         $userInfo = $this->getUserInfo();
         if (isset($userInfo[0]['status']) && (int)$userInfo[0]['status'] === 2) {
@@ -292,12 +306,12 @@ class Index extends \system\BaseController {
             }
             $url = "sandbox.php?name={$identifier}&type={$type}";
             if ($type === 'php') {
-                $execStr = "docker run -v " . ROOT . "app/sandbox/{$identifier}:/root/data/codelab/{$identifier} yequjinxin/php:v1.00 php /root/script/exec_code.php {$identifier}";
+                $execStr = "docker run -v " . ROOT . "app/sandbox/{$identifier}:/root/data/codelab/{$identifier} -name {$identifier} yequjinxin/php:v1.00 php /root/script/exec_code.php {$identifier}";
                 $ret = system($execStr);
                 if ($ret !== false) {
                     // 清空container
-                    // system("docker stop $(docker ps -a -q)");
-                    // system("docker rm $(docker ps -a -q)");
+                    // system("docker stop $identifier");
+                    system("docker rm $identifier");
                     ob_clean();
                     echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
                 } else {
@@ -312,7 +326,7 @@ class Index extends \system\BaseController {
                     exit;
                 }
                 $port = $gateone[0]['port'];
-                $execStr = "docker run -v " . ROOT . "app/sandbox/{$identifier}/source:/root/{$proName} -d -p $port:$port yequjinxin/gateone:v1.00 /bin/sh -c '/usr/local/bin/run.sh $port'";
+                $execStr = "docker run -v " . ROOT . "app/sandbox/{$identifier}/source:/root/{$proName} -d -p $port:$port -name {$identifier} yequjinxin/gateone:v1.00 /bin/sh -c '/usr/local/bin/run.sh $port'";
                 $ret = system($execStr);
                 if ($ret !== false) {
                     ob_clean();
@@ -357,7 +371,7 @@ class Index extends \system\BaseController {
         $filePath = $this->getFIleListById($fileList, $parentId);
         array_unshift($filePath, $fileName);
         $identify = $proName . '_' . $proId;
-        \app\lib\File::writeFile($filePath, $content, $identify);
+        \app\lib\File::writeFile($filePath, stripslashes($content), $identify);
 
         $now = date('Y-m-d H:i:s');
         if (empty($id)) {

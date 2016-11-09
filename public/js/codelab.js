@@ -62,11 +62,12 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                                 containerSrc = 'http://123.56.144.238:' + ret.port + '/?ssh=ssh://root@localhost/';
                                 $('#div-run iframe').attr('src', containerSrc);
                                 containSwitch(false);
+                                $('#btn-run').hide();
+                                $('#btn-stop').show();
                             } else {
                                 containerSrc = ret.data;
                                 $('#div-run iframe').attr('src', containerSrc);
                             }
-                            $('#btn-run span').attr('class', 'glyphicon glyphicon-stop');
                         } else {
                             lib.showMsg(ret.msg);
                         }
@@ -75,6 +76,20 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                 );
                 break;
         }
+    });
+
+    $('#btn-stop').click(function () {
+        var proId = $('#pro-id').val();
+        var proName = $('#pro-name').val();
+        $.post('index.php?a=stopContainer', {proId, proId, proName: proName}, function (ret) {
+            ret = JSON.parse(ret);
+            if (!ret.code === 0) {
+                $('#btn-run').show();
+                $('#btn-stop').hide();
+            } else {
+                lib.showMsg(ret.msg);
+            }
+        });
     });
 
     // 放大
