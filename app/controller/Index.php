@@ -273,6 +273,7 @@ class Index extends \system\BaseController {
     function stopContainer() {
         $proId = isset($_POST['proId']) ? intval($_POST['proId']) : 0;
         $proName = isset($_POST['proName']) ? trim($_POST['proName']) : '';
+        $this->db->update("update gateone set status=0 where proId='$proId' and status=1");
         $identifier = $proName . '_' . $proId;
         $execStr = "docker stop $identifier && docker rm $identifier";
         $ret = system($execStr);
