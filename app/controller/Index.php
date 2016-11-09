@@ -274,7 +274,7 @@ class Index extends \system\BaseController {
         $proId = isset($_POST['proId']) ? intval($_POST['proId']) : 0;
         $proName = isset($_POST['proName']) ? trim($_POST['proName']) : '';
         $identifier = $proName . '_' . $proId;
-        $execStr = "docker stop $identifier";
+        $execStr = "docker stop $identifier && docker rm $identifier";
         $ret = system($execStr);
         if ($ret !== false) {
             ob_clean();
