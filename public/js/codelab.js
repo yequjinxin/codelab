@@ -8,6 +8,7 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
     var proId = $('#pro-id').val();
     var proName = $('#pro-name').val();
     var fileType = $('#lang').val();
+    var containerSrc = '';
 
     $.post('index.php?&a=getCodes', {proId: proId}, function (data) {
         data = JSON.parse(data);
@@ -58,11 +59,14 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                         ret = JSON.parse(ret);
                         if (+ret.code === 0) {
                             if (lang === 'c') {
-                                window.open('http://123.56.144.238:' + ret.port + '/?ssh=ssh://root@localhost/');
+                                containerSrc = 'http://123.56.144.238:' + ret.port + '/?ssh=ssh://root@localhost/';
+                                $('#div-run iframe').attr('src', containerSrc);
                             } else {
-                                window.open(ret.data);
+                                containerSrc = ret.data;
+                                $('#div-run iframe').attr('src', containerSrc);
                             }
-                        } else if (+ret.code === 1) {
+                            $('#btn-run span').attr('class', 'glyphicon glyphicon-stop');
+                        } else {
                             lib.showMsg(ret.msg);
                         }
                         $('#btn-run').button('reset');
@@ -79,6 +83,31 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
         tab.editorZoom.setOption('value', tab.editor.getValue());
         $('#modal-zoom').find('.CodeMirror').css('height', $(window).height() + 'px');
         tab.editorZoom.focus();
+    });
+
+    // 容器
+    function getSwitch() {
+        var flag = true;
+        return function () {
+            flag = !flag;
+            return flag;
+        }
+    }
+    var flagFunc = getSwitch();
+    $('#btn-container-switch').click(function () {
+        var flag = flagFunc();
+        if (!flag) {
+            $('#div-run').hide();
+            $('#div-code').attr('class', 'col-lg-10');
+            $('#btn-container-switch span').attr('class', 'glyphicon glyphicon-chevron-left');
+        } else {
+            $('#div-run').show();
+            $('#div-code').attr('class', 'col-lg-6');
+            $('#btn-container-switch span').attr('class', 'glyphicon glyphicon-chevron-right');
+        }
+    });
+    $('#btn-container-max').click(function () {
+        window.open(containerSrc);
     });
 
     return {

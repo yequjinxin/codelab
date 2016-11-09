@@ -40,7 +40,8 @@
         <input id="pro-name" type="hidden" value="<?php echo empty($proName) ? '' : $proName; ?>">
         <input id="pro-type" type="hidden" value="<?php echo empty($proType) ? '' : $proType; ?>">
         <div class="row">
-            <div class="col-lg-offset-1 col-lg-2 col-xs-4">
+            <!-- <div class="col-lg-offset-1 col-lg-2 col-xs-4"> -->
+            <div class="col-lg-2 col-xs-4">
                 <select id="lang" class="form-control">
                     <?php foreach ($langOption as $v) { ?>
                     <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
@@ -58,17 +59,12 @@
                     ?
                 </button>
             </div>
-            <div class="col-lg-7 col-xs-7">
-                <button id="btn-run" type="button" class="btn btn-primary float-right" style="margin-left:20px;">运行</button>
-                <button id="btn-zoom" type="button" class="btn btn-default float-right">
-                    <span class="glyphicon glyphicon-zoom-in"></span>
-                </button>
-            </div>
         </div>
         <br>
         <div class="row">
-            <div class="col-lg-offset-1 col-lg-2">
-                <div class="browser-top">
+            <!-- <div class="col-lg-offset-1 col-lg-2"> -->
+            <div class="col-lg-2">
+                <div class="bar-height">
                     <!-- 
                     <button id="btn-refresh-dir" type="button" class="btn btn-sm btn-default" title="刷新目录">
                         <span class="glyphicon glyphicon-refresh"></span>
@@ -87,7 +83,21 @@
                 <div id="browser">
                 </div>
             </div>
-            <div class="col-lg-8">
+            <div id="div-code" class="col-lg-6">
+                <div class="bar-height">
+                    <button id="btn-zoom" type="button" class="btn btn-sm btn-default" title="放大编辑器">
+                        <span class="glyphicon glyphicon-zoom-in"></span>
+                    </button>
+                    <button id="btn-run" type="button" class="btn btn-sm btn-primary" title="运行">
+                        <span class="glyphicon glyphicon-play"></span>
+                    </button>
+                    <button id="btn-container-switch" type="button" class="btn btn-sm btn-default float-right" style="margin-left:5px;" title="收起">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </button>
+                    <button id="btn-container-max" type="button" class="btn btn-sm btn-default float-right" title="到新的tab页运行">
+                        <span class="glyphicon glyphicon-zoom-in"></span>
+                    </button>
+                </div>
                 <div class="transparent_class mylayer"><span></span></div>
                 <ul id="code-tab" class="nav nav-tabs">
                     <li id="code-add">
@@ -96,9 +106,14 @@
                 </ul>
                 <textarea id="code" style="display:none;"></textarea>
             </div>
+            <div id="div-run" class="col-lg-4">
+                <div class="bar-height" style="margin-top: 40px;">
+                </div>
+                <iframe src="http://123.56.144.238:10445/?ssh=ssh://root@localhost/" scrolling="no" frameborder="1"></iframe>
+            </div>
         </div>
     </div>
-    <div id="modal-zoom" class="col-sm-12">
+    <div id="modal-zoom" class="col-lg-12">
         <textarea id="codeZoom" style="display:none;"></textarea>
     </div>
     <!-- 添加目录开始 -->

@@ -308,7 +308,7 @@ class Index extends \system\BaseController {
             } else if ($type === 'c') {
                 $gateone = $this->db->find('select id,port from gateone where status=0 limit 1');
                 if (empty($gateone[0])) {
-                    echo json_encode(array('code' => 3, 'msg' => ''));
+                    echo json_encode(array('code' => 3, 'msg' => 'no more OS resource'));
                     exit;
                 }
                 $port = $gateone[0]['port'];

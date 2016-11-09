@@ -36,7 +36,7 @@
     z-index: 1031;
 }
 
-.browser-top {
+.bar-height {
     height: 40px;
 }
 
@@ -48,5 +48,17 @@
 }
 
 .input-tab {
-    width:100px;margin:5px;
+    width:100px;
+    margin:5px;
+}
+#div-main {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+#div-run {
+    font-family: 'monospace';
+}
+#div-run iframe {
+    width: 100%;
+    height: 300px;
 }
