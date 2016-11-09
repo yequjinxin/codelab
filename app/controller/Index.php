@@ -357,7 +357,7 @@ class Index extends \system\BaseController {
         $filePath = $this->getFIleListById($fileList, $parentId);
         array_unshift($filePath, $fileName);
         $identify = $proName . '_' . $proId;
-        \app\lib\File::writeData($filePath, $content, $identify);
+        \app\lib\File::writeFile($filePath, $content, $identify);
 
         $now = date('Y-m-d H:i:s');
         if (empty($id)) {
