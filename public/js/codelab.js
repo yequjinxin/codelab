@@ -61,9 +61,11 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                             if (lang === 'c') {
                                 containerSrc = 'http://123.56.144.238:' + ret.port + '/?ssh=ssh://root@localhost/';
                                 $('#div-run iframe').attr('src', containerSrc);
-                                containSwitch(false);
-                                $('#btn-run').hide();
-                                $('#btn-stop').show();
+                                setTimeout(function () {
+                                    containSwitch(false);
+                                    $('#btn-run').hide();
+                                    $('#btn-stop').show();
+                                }(), 2000);
                             } else {
                                 containerSrc = ret.data;
                                 $('#div-run iframe').attr('src', containerSrc);
@@ -83,9 +85,10 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
         var proName = $('#pro-name').val();
         $.post('index.php?a=stopContainer', {proId, proId, proName: proName}, function (ret) {
             ret = JSON.parse(ret);
-            if (!ret.code === 0) {
+            if (+ret.code === 0) {
                 $('#btn-run').show();
                 $('#btn-stop').hide();
+                containSwitch(true);
             } else {
                 lib.showMsg(ret.msg);
             }
