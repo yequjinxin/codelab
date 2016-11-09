@@ -82,7 +82,7 @@ class Index extends \system\BaseController {
             $now = date('Y-m-d H:i:s');
             // 生成项目记录
             $userInfo = $this->getUserInfo();
-            $userId = isset($userInfo[0]['id']) ? isset($userInfo[0]['id']) : 0;
+            $userId = isset($userInfo[0]['id']) ? $userInfo[0]['id'] : 0;
             $id = $this->db->add("insert into project(name,type,status,user,description,create_time,update_time)
                 values('$proName','$proType',1,'$userId','$proDesc','$now','$now')");
             if (!empty($id)) {
