@@ -113,7 +113,7 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
 
     // 容器
     function getSwitch() {
-        var flag = true;
+        var flag = false;
         return function () {
             flag = !flag;
             return flag;
