@@ -83,7 +83,7 @@ define(['config', 'lib'], function (config, lib) {
             $('.mylayer').show();
             $.post(
                 'index.php?&a=saveCode',
-                {id: id, fileName: name, proId: proId,parentId: parentId, type: fileType, content: content, proName: },
+                {id: id, fileName: name, proId: proId,parentId: parentId, type: fileType, content: content, proName: proName},
                 function (ret) {
                     ret = JSON.parse(ret);
                     $('.mylayer').hide();
