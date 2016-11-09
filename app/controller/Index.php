@@ -306,7 +306,7 @@ class Index extends \system\BaseController {
             }
             $url = "sandbox.php?name={$identifier}&type={$type}";
             if ($type === 'php') {
-                $execStr = "docker run -v " . ROOT . "app/sandbox/{$identifier}:/root/data/codelab/{$identifier} -name {$identifier} yequjinxin/php:v1.00 php /root/script/exec_code.php {$identifier}";
+                $execStr = "docker run -v " . ROOT . "app/sandbox/{$identifier}:/root/data/codelab/{$identifier} --name {$identifier} yequjinxin/php:v1.00 php /root/script/exec_code.php {$identifier}";
                 $ret = system($execStr);
                 if ($ret !== false) {
                     // 清空container
@@ -326,7 +326,7 @@ class Index extends \system\BaseController {
                     exit;
                 }
                 $port = $gateone[0]['port'];
-                $execStr = "docker run -v " . ROOT . "app/sandbox/{$identifier}/source:/root/{$proName} -d -p $port:$port -name {$identifier} yequjinxin/gateone:v1.00 /bin/sh -c '/usr/local/bin/run.sh $port'";
+                $execStr = "docker run -v " . ROOT . "app/sandbox/{$identifier}/source:/root/{$proName} -d -p $port:$port --name {$identifier} yequjinxin/gateone:v1.00 /bin/sh -c '/usr/local/bin/run.sh $port'";
                 $ret = system($execStr);
                 if ($ret !== false) {
                     ob_clean();
