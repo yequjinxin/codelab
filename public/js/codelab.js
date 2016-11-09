@@ -61,6 +61,7 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                             if (lang === 'c') {
                                 containerSrc = 'http://123.56.144.238:' + ret.port + '/?ssh=ssh://root@localhost/';
                                 $('#div-run iframe').attr('src', containerSrc);
+                                containSwitch(false);
                             } else {
                                 containerSrc = ret.data;
                                 $('#div-run iframe').attr('src', containerSrc);
@@ -93,10 +94,8 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
             return flag;
         }
     }
-    var flagFunc = getSwitch();
-    $('#btn-container-switch').click(function () {
-        var flag = flagFunc();
-        if (!flag) {
+    function containSwitch(flag) {
+        if (flag) {
             $('#div-run').hide();
             $('#div-code').attr('class', 'col-lg-10');
             $('#btn-container-switch span').attr('class', 'glyphicon glyphicon-chevron-left');
@@ -105,9 +104,21 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
             $('#div-code').attr('class', 'col-lg-6');
             $('#btn-container-switch span').attr('class', 'glyphicon glyphicon-chevron-right');
         }
+    }
+    var flagFunc = getSwitch();
+    $('#btn-container-switch').click(function () {
+        var flag = flagFunc();
+        containSwitch(flag);
     });
     $('#btn-container-max').click(function () {
         window.open(containerSrc);
+    });
+    containSwitch(true);
+
+    $('#btn-container-fresh').click(function () {
+        $('#div-run iframe').remove();
+        var iframe = $('<iframe src="' + containerSrc + '" scrolling="no" frameborder="1"></iframe>');
+        $('#div-run').append(iframe);
     });
 
     return {
