@@ -39,7 +39,7 @@ class Index extends \system\BaseController {
                 where user='$userId' and status=1 order by update_time limit $offset,$proPerPage");
 
             // 分页
-            $totalPro = $this->db->find('select count(*) as total from project where status=1');
+            $totalPro = $this->db->find("select count(*) as total from project where user='$userId' and status=1");
             $totalPro = $totalPro[0]['total'];
             $totalPages = (int)ceil($totalPro / $proPerPage);
             $pagerNum = 5; // 一共显示几页

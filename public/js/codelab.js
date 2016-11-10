@@ -145,7 +145,7 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
     $('#btn-container-fresh').click(function () {
         $('#div-run iframe').remove();
         var iframe = $('<iframe src="' + containerSrc + '" scrolling="no" frameborder="1"></iframe>');
-        $('#div-run').append(iframe);
+        $('#div-run .panel-body').append(iframe);
     });
 
     return {
