@@ -59,11 +59,11 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                         ret = JSON.parse(ret);
                         if (+ret.code === 0) {
                             if (lang === 'c') {
-                                containerSrc = 'http://123.56.144.238:' + ret.port + '/?ssh=ssh://root@localhost/';
-                                var iframe = $('<iframe src="' + containerSrc + '" scrolling="no" frameborder="3"></iframe>');
-                                $('#div-run .panel-body').empty().append(iframe);
                                 // $('#div-run iframe').attr('src', containerSrc);
                                 setTimeout(function () {
+                                    containerSrc = 'http://123.56.144.238:' + ret.port + '/?ssh=ssh://root@localhost/';
+                                    var iframe = $('<iframe src="' + containerSrc + '" scrolling="no" frameborder="3"></iframe>');
+                                    $('#div-run .panel-body').empty().append(iframe);
                                     containSwitch(false);
                                     $('#btn-run').button('reset');
                                     $('#btn-run').hide();
