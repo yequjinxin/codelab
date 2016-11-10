@@ -72,7 +72,7 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                                 }, 3000);
                             } else {
                                 containerSrc = ret.data;
-                                $('#div-run iframe').attr('src', containerSrc);
+                                window.open(containerSrc);
                                 $('#btn-run').button('reset');
                             }
                         } else {
