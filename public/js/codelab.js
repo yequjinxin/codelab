@@ -60,7 +60,9 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                         if (+ret.code === 0) {
                             if (lang === 'c') {
                                 containerSrc = 'http://123.56.144.238:' + ret.port + '/?ssh=ssh://root@localhost/';
-                                $('#div-run iframe').attr('src', containerSrc);
+                                var iframe = $('<iframe src="' + containerSrc + '" scrolling="no" frameborder="3"></iframe>');
+                                $('#div-run .panel-body').empty().append(iframe);
+                                // $('#div-run iframe').attr('src', containerSrc);
                                 setTimeout(function () {
                                     containSwitch(false);
                                     $('#btn-run').button('reset');
@@ -147,7 +149,7 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
 
     $('#btn-container-fresh').click(function () {
         $('#div-run iframe').remove();
-        var iframe = $('<iframe src="' + containerSrc + '" scrolling="no" frameborder="1"></iframe>');
+        var iframe = $('<iframe src="' + containerSrc + '" scrolling="no" frameborder="3"></iframe>');
         $('#div-run .panel-body').append(iframe);
     });
 
