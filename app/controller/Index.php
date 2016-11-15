@@ -35,7 +35,7 @@ class Index extends \system\BaseController {
 
             $userInfo = $this->getUserInfo();
             $userId = isset($userInfo[0]['id']) ? $userInfo[0]['id'] : 0;
-            $proList = $this->db->find("select id,name,type,user,update_time from project
+            $proList = $this->db->find("select id,name,type,description,user,update_time from project
                 where user='$userId' and status=1 order by update_time limit $offset,$proPerPage");
 
             // 分页
@@ -100,7 +100,7 @@ class Index extends \system\BaseController {
         $proId = isset($_GET['pro_id']) ? intval($_GET['pro_id']) : '';
 
         // 根据proId查询name,type
-        $proInfo = $this->db->find("select name,type from project where id='$proId'");
+        $proInfo = $this->db->find("select name,type,description from project where id='$proId'");
         if (!empty($proInfo)) {
             $proInfo = $proInfo[0];
         } else {
@@ -108,6 +108,7 @@ class Index extends \system\BaseController {
         }
         $proName = $proInfo['name'];
         $proType = $proInfo['type'];
+        $proDesc = $proInfo['description'];
 
         $this->display(
             'main',
@@ -115,6 +116,7 @@ class Index extends \system\BaseController {
                 'proId' => $proId,
                 'proName' => $proName,
                 'proType' => $proType,
+                'proDesc' => $proDesc,
                 'langOption' => $this->langOption[$proType],
             )
         );
@@ -171,7 +173,8 @@ class Index extends \system\BaseController {
     function updateProName() {
         $id = isset($_POST['proId']) ? $_POST['proId'] : 0;
         $name = isset($_POST['proName']) ? $_POST['proName'] : '';
-        $ret = $this->db->update("update project set name='$name' where id='$id'");
+        $desc = isset($_POST['proDesc']) ? $_POST['proDesc'] : '';
+        $ret = $this->db->update("update project set name='$name',description='$desc' where id='$id'");
         if ($ret) {
             $code = 0;
             $msg = '';

@@ -24,9 +24,13 @@ body {
 
 .data-title a {
     display: block;
-    /* text-decoration: none;*/
+    text-decoration: none;
+    word-wrap: break-word;
+    word-break: normal; /* break-all 可在单词内换行 */
 }
-
+.data-title span {
+    display: block;
+}
 .data-pager {
     float: right;
 }

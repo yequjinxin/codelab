@@ -169,11 +169,14 @@ define(['config', 'lib'], function (config, lib) {
             if (fileId === -1) {
                 // 更新项目名称
                 var proId = $('#pro-id').val();
-                $.post('index.php?a=updateProName', {proId: proId, proName: dirName}, function (ret) {
+                var proDesc = $('#edit-desc textarea').val();
+                $.post('index.php?a=updateProName', {proId: proId, proName: dirName, proDesc: proDesc}, function (ret) {
                     ret = JSON.parse(ret);
                     if (ret.code === 0) {
                         renderBrowser(-1);
                         $('#pro-name').val(dirName);
+                        $('#edit-desc textarea').val(proDesc);
+                        $('#pro-desc').val(proDesc);
                         $('#modal-add-dir').modal('hide');
                     }
                 });
@@ -228,7 +231,10 @@ define(['config', 'lib'], function (config, lib) {
         if (!file[0] || +file[0].fileId === -1) {
             // 更新项目名称
             $('#modal-add-dir .modal-title').text('修改项目名称');
+            $('#edit-desc').show();
+            $('#edit-desc textarea').val($('#pro-desc').val());
         } else {
+            $('#edit-desc').hide();
             $('#modal-add-dir .modal-title').text('修改文件名');
         }
         $('#dir-name').val(file[0].text);
