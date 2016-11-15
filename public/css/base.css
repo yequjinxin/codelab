@@ -31,6 +31,10 @@ body {
 .data-title span {
     display: block;
 }
+.data-title .data-desc, .data-time {
+    padding-top: 3px;
+    color: #999999;
+}
 .data-pager {
     float: right;
 }

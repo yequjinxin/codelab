@@ -228,7 +228,9 @@ define(['config', 'lib'], function (config, lib) {
     $('#btn-edit-file').click(function () {
         var file = $('#browser').treeview('getSelected');
         // -1 用来判断这是一个项目节点(首节点)
-        if (!file[0] || +file[0].fileId === -1) {
+        if (!file[0]) {
+            return;
+        } else if (+file[0].fileId === -1) {
             // 更新项目名称
             $('#modal-add-dir .modal-title').text('修改项目名称');
             $('#edit-desc').show();

@@ -33,8 +33,8 @@
                         <?php foreach ($proList as $k => $v) { ?>
                         <li class="list-group-item data-title">
                             <a href="index.php?a=main&pro_id=<?php echo $v['id']; ?>"><?php echo $v['name'] ?>
-                                <span><?php echo $this->user['screen_name']; ?> 更新于 <?php echo substr($v['update_time'], 5); ?></span>
-                                <span><?php echo $v['description']; ?></span>
+                                <span class="data-time"><?php echo $this->user['screen_name']; ?> 更新于 <?php echo substr($v['update_time'], 5); ?></span>
+                                <span class="data-desc"><?php echo mb_substr($v['description'], 0, 500); ?></span>
                             </a>
                         </li>
                         <?php } ?>
@@ -122,7 +122,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">项目描述</label>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="desc" placeholder="请填写项目描述" value="">
+                                    <textarea name="desc" class="form-control" style="height: 200px;"></textarea>
                                 </div>
                             </div>
                             <input type="hidden" name="subFlag" value="1">
