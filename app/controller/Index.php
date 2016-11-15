@@ -166,6 +166,23 @@ class Index extends \system\BaseController {
     }
 
     /**
+     * 更新项目名称
+     */
+    function updateProName() {
+        $id = isset($_POST['proId']) ? $_POST['proId'] : 0;
+        $name = isset($_POST['proName']) ? $_POST['proName'] : '';
+        $ret = $this->db->update("update project set name='$name' where id='$id'");
+        if ($ret) {
+            $code = 0;
+            $msg = '';
+        } else {
+            $code = 1;
+            $msg = 'update error' . $this->db->error();
+        }
+        echo json_encode(array('code' => $code, 'msg' => $msg));
+    }
+
+    /**
      * 获取browser所需数据以及nameMap
      */
     function getCodes() {

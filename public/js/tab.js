@@ -166,6 +166,19 @@ define(['config', 'lib'], function (config, lib) {
         var fileId = $('#dir-name').data('fileId')
         if (fileId) {
             // update
+            if (fileId === -1) {
+                // 更新项目名称
+                var proId = $('#pro-id').val();
+                $.post('index.php?a=updateProName', {proId: proId, proName: dirName}, function (ret) {
+                    ret = JSON.parse(ret);
+                    if (ret.code === 0) {
+                        renderBrowser(-1);
+                        $('#pro-name').val(dirName);
+                        $('#modal-add-dir').modal('hide');
+                    }
+                });
+                return;
+            }
             var name = dirName;
             $.post('index.php?a=updateFileName', {id: fileId, name: name}, function (ret) {
                 ret = JSON.parse(ret);
@@ -210,16 +223,17 @@ define(['config', 'lib'], function (config, lib) {
     });
     // 修改文件名
     $('#btn-edit-file').click(function () {
-        $('#modal-add-dir .modal-title').text('修改文件名');
         var file = $('#browser').treeview('getSelected');
         // -1 用来判断这是一个项目节点(首节点)
         if (!file[0] || +file[0].fileId === -1) {
-            return;
+            // 更新项目名称
+            $('#modal-add-dir .modal-title').text('修改项目名称');
         } else {
-            dirName = $('#dir-name').val(file[0].text);
-            $('#dir-name').data('fileId', file[0].fileId);
-            $('#modal-add-dir').modal('show');
+            $('#modal-add-dir .modal-title').text('修改文件名');
         }
+        $('#dir-name').val(file[0].text);
+        $('#dir-name').data('fileId', file[0].fileId);
+        $('#modal-add-dir').modal('show');
     });
     // 删除文件
     $('#btn-del-file').click(function () {
