@@ -2,7 +2,7 @@
 namespace system;
 
 class Db {
-    static $db = null;
+    static private $db = null;
     public $conn = null;
     private function __construct() {
         $config = get_config()['db']['mysql'];
@@ -14,6 +14,9 @@ class Db {
             self::$db = new self();
         }
         return self::$db;
+    }
+
+    private function  __clone() {
     }
 
     function find($sql) {

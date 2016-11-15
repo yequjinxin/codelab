@@ -7,6 +7,14 @@
             <div class="col-lg-3 col-md-3 col-sm-2 col-xs-1">
             </div>
             <div class="col-lg-6 col-md-6 col-sm-8 col-xs-10">
+                <div style="display:inline-block;">
+                    <select id="search-type" class="form-control">
+                        <option value="">全部</option>
+                        <?php foreach ($proType as $v) { ?>
+                        <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
                 <button id="create-pro" type="button" class="btn btn-primary btn-sm float-right">
                     <span class="glyphicon glyphicon-plus"></span> 添加项目
                 </button>
@@ -111,11 +119,9 @@
                                 <label class="col-sm-2 control-label"><span class="red">*</span>项目类型</label>
                                 <div class="col-sm-4">
                                     <select name="type" class="form-control">
-                                        <option value="html">html</option>
-                                        <!-- <option value="nodejs">nodejs</option> -->
-                                        <option value="php">php</option>
-                                        <!-- <option value="python">python</option> -->
-                                        <option value="c">c</option>
+                                        <?php foreach ($proType as $v) { ?>
+                                        <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
+                                        <?php } ?>
                                     </select>
                                 </div>
                             </div>
@@ -142,7 +148,10 @@
 {footer}
     <script>
         requirejs(['baseExc'], function (baseExc) {
-            
+            $('#search-type').change(function () {
+                var type = $(this).val();
+                window.location.href = 'index.php?a=project&type=' + type;
+            }).val(<?php echo empty($_GET['type']) ? '' : "'{$_GET['type']}'"; ?>);
         });
     </script>
 {footer}

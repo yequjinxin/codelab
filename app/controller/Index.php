@@ -15,6 +15,12 @@ class Index extends \system\BaseController {
     );
 
     /**
+     * 项目类型
+     * @var unknown_type
+     */
+    private $proType = array('html', 'php', 'c');
+
+    /**
      * 首页
      */
     function index() {
@@ -30,16 +36,23 @@ class Index extends \system\BaseController {
     function project() {
         if (!isset($_POST['subFlag'])) {
             $pagerNo = isset($_GET['pager']) ? intval($_GET['pager']) : 1;
+            $proType = isset($_GET['type']) ? $_GET['type'] : '';
             $proPerPage = 10; // 每页显示几条记录
             $offset = ($pagerNo - 1) * $proPerPage;
 
             $userInfo = $this->getUserInfo();
             $userId = isset($userInfo[0]['id']) ? $userInfo[0]['id'] : 0;
+            if (!empty($proType)) {
+                $typeStr = "and type='$proType'";
+            } else {
+                $typeStr = '';
+            }
+            $where = "where user='$userId' {$typeStr} and status=1";
             $proList = $this->db->find("select id,name,type,description,user,update_time from project
-                where user='$userId' and status=1 order by update_time limit $offset,$proPerPage");
+                $where order by update_time limit $offset,$proPerPage");
 
             // 分页
-            $totalPro = $this->db->find("select count(*) as total from project where user='$userId' and status=1");
+            $totalPro = $this->db->find("select count(*) as total from project $where");
             $totalPro = $totalPro[0]['total'];
             $totalPages = (int)ceil($totalPro / $proPerPage);
             $pagerNum = 5; // 一共显示几页
@@ -73,6 +86,7 @@ class Index extends \system\BaseController {
                 array(
                    'proList' => $proList,
                    'pagerInfo' => $pagerInfo,
+                   'proType' => $this->proType,
                 )
             );
         } else {
