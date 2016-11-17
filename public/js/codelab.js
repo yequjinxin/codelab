@@ -52,13 +52,14 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
             case 'html':
             case 'php':
             case 'c':
+            case 'python':
                 $.post(
                     'index.php?a=runCode',
                     {codes: JSON.stringify(codes), proId: proId, proName: proName, type: lang},
                     function (ret) {
                         ret = JSON.parse(ret);
                         if (+ret.code === 0) {
-                            if (lang === 'c') {
+                            if (lang === 'c' || lang === 'python') {
                                 // $('#div-run iframe').attr('src', containerSrc);
                                 containerSrc = 'http://123.56.144.238:' + ret.port + '/?ssh=ssh://root@localhost/';
                                 var iframe = $('<iframe src="' + containerSrc + '" scrolling="no" frameborder="3"></iframe>');
