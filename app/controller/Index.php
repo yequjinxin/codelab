@@ -9,16 +9,16 @@ class Index extends \system\BaseController {
      */
     private $langOption = array(
         'html' => array('html', 'js', 'css'),
-        'javascript' => array('js'),
         'php' => array('php', 'html', 'js', 'css'),
         'c' => array('c', 'h'),
+        'python' => array('py'),
     );
 
     /**
      * 项目类型
      * @var unknown_type
      */
-    private $proType = array('html', 'php', 'c');
+    private $proType = array('html', 'php', 'c', 'python');
 
     /**
      * 首页
@@ -365,7 +365,7 @@ class Index extends \system\BaseController {
                 }
             } else if ($type === 'html') {
                 echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
-            } else if ($type === 'c') {
+            } else if ($type === 'c' || $type === 'python') {
                 $gateone = $this->db->find('select id,port from gateone where status=0 limit 1');
                 if (empty($gateone[0])) {
                     echo json_encode(array('code' => 3, 'msg' => 'no more OS resource'));

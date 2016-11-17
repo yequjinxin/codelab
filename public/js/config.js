@@ -22,8 +22,7 @@ define([], function () {
         'js': {mode: 'javascript', fileName: 'main.js', /*ext: 'js'*/},
         'php': {mode: 'application/x-httpd-php', fileName: 'index.php', /*ext: 'php'*/},
         'c': {mode: 'text/x-csrc', fileName: 'main.c', /*ext : 'c'*/},
-        'h': {mode: 'text/x-csrc', fileName: 'tmp.h', /*ext: 'h'*/},
-        // 'nodejs': {mode: 'javascript', fileName: /*'main.js'*/},
+        'py': {mode: 'text/x-python', fileName: 'main.py'},
     };
 
     // 设置文件信息
@@ -65,6 +64,19 @@ define([], function () {
                     + '\n Date: ' + date.format('yyyy-MM-dd hh:mm:ss')
                     + '\n History: '
                     + '\n****************************************/'
+                    + '\n';
+                break;
+            case 'py':
+                str = '##############################################################'
+                    + '\n#'
+                    + '\n# Copyright (c) 2016 ranlau.com All Rights Reserved'
+                    + '\n#'
+                    + '\n############################################################'
+                    + '\n"""'
+                    + '\nthis is the description'
+                    + '\nAuthors:'
+                    + '\nDate: ' + date.format('yyyy-MM-dd hh:mm:ss')
+                    + '\n"""'
                     + '\n';
                 break;
         }
