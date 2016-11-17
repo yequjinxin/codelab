@@ -7,7 +7,8 @@
             <div class="col-lg-3 col-md-3 col-sm-2 col-xs-1">
             </div>
             <div class="col-lg-6 col-md-6 col-sm-8 col-xs-10">
-                <div style="display:inline-block;">
+                <span>文件类型:</span>
+                <div style="display:inline-block;margin-right: 20px;">
                     <select id="search-type" class="form-control">
                         <option value="">全部</option>
                         <?php foreach ($proType as $v) { ?>
@@ -15,9 +16,23 @@
                         <?php } ?>
                     </select>
                 </div>
+                <span>自定义类型:</span>
+                <div style="display:inline-block">
+                    <select id="search-folder" class="form-control">
+                        <option value="">全部</option>
+                        <?php foreach ($folderList as $v) { ?>
+                        <option value="<?php echo $v['id']; ?>"><?php echo $v['name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
                 <button id="create-pro" type="button" class="btn btn-primary btn-sm float-right">
                     <span class="glyphicon glyphicon-plus"></span> 添加项目
                 </button>
+                <a href="index.php?c=folder&a=index">
+                    <button id="manage-folder" type="button" class="btn btn-default btn-sm float-right">
+                        <span class="glyphicon glyphicon-edit"></span> 管理自定义
+                    </button>
+                </a>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-2 col-xs-1">
             </div>
@@ -110,13 +125,13 @@
                     <form id="form-project" action="index.php?a=project" method="post">
                         <div class="form-horizontal">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label"><span class="red">*</span>项目名称</label>
+                                <label class="col-sm-3 control-label"><span class="red">*</span>项目名称</label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" name="name" placeholder="请填写项目名称" value="">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 control-label"><span class="red">*</span>项目类型</label>
+                                <label class="col-sm-3 control-label">项目类型</label>
                                 <div class="col-sm-4">
                                     <select name="type" class="form-control">
                                         <?php foreach ($proType as $v) { ?>
@@ -126,7 +141,17 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">项目描述</label>
+                                <label class="col-sm-3 control-label">自定义类型</label>
+                                <div class="col-sm-4">
+                                    <select name="folder" class="form-control">
+                                        <?php foreach ($folderList as $v) { ?>
+                                        <option value="<?php echo $v['id']; ?>"><?php echo $v['name']; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">项目描述</label>
                                 <div class="col-sm-7">
                                     <textarea name="desc" class="form-control" style="height: 200px;"></textarea>
                                 </div>
@@ -148,10 +173,24 @@
 {footer}
     <script>
         requirejs(['baseExc'], function (baseExc) {
+            function refreshProList() {
+                var type = $('#search-type').val();
+                var folder = $('#search-folder').val();
+                var paramStr = '';
+                if (type !== '') {
+                    paramStr += '&type=' + type;
+                }
+                if (folder != '') {
+                    paramStr += '&folder=' + folder;
+                }
+                window.location.href = 'index.php?a=project' + paramStr;
+            }
             $('#search-type').change(function () {
-                var type = $(this).val();
-                window.location.href = 'index.php?a=project&type=' + type;
+                refreshProList();
             }).val(<?php echo empty($_GET['type']) ? '' : "'{$_GET['type']}'"; ?>);
+            $('#search-folder').change(function () {
+                refreshProList();
+            }).val(<?php echo empty($_GET['folder']) ? '' : "'{$_GET['folder']}'"; ?>);
         });
     </script>
 {footer}

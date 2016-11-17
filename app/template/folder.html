@@ -1,0 +1,162 @@
+{extends}base.html{extends}
+{header}
+    <link rel="stylesheet" href="public/css/folder.css">
+    <link rel="stylesheet" href="public/lib/bootstrap-table/bootstrap-table.min.css">
+    <script src="public/lib/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="public/lib/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+{header}
+{content}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-2 col-xs-offset-1 col-lg-6 col-md-6 col-sm-8 col-xs-10">
+                <button id="add-folder" type="button" class="btn btn-primary btn-sm float-right">
+                    <span class="glyphicon glyphicon-plus"></span> 添加自定义类型
+                </button>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-2 col-xs-offset-1 col-lg-6 col-md-6 col-sm-8 col-xs-10">
+                <table id="table-folder"
+                       data-toggle="table"
+                       data-show-refresh="false"
+                       data-show-toggle="false"
+                       data-show-columns="false"
+                       data-classes="table table-bordered table-hover"
+                       data-show-export="true"
+                       data-pagination="true"
+                       data-page-list="[10]"
+                       data-show-footer="false"
+                       data-side-pagination="server"
+                       data-query-params="queryParams"
+                       data-url="index.php?c=folder&a=getFolderList"
+                       data-click-to-select="true"
+                       data-single-select="true"
+                       data-pagination-first-text="首页"
+                       data-pagination-pre-text="上一页"
+                       data-pagination-next-text="下一页"
+                       data-pagination-last-text="末页"
+                       data-unique-id="id">
+                    <thead>
+                        <tr>
+                            <th data-field="id" class="hidden"></th>
+                            <th data-field="name">类型名</th>
+                            <th data-field="description">描述</th>
+                            <th data-field="action" id="action-formatter" data-formatter="actionFormatter" data-align="center">
+                                 <div>
+                                     <span>操作:</span>
+                                     <i class="glyphicon glyphicon-edit"></i>编辑
+                                     <i class="glyphicon glyphicon-remove"></i>删除
+                                 </div>
+                             </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-folder" class="modal fade" data-backdrop="static" data-keyboard="false" style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">添加</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">名称</label>
+                            <div class="col-sm-7">
+                                <input id="folder-name" type="text" class="form-control" placeholder="添加类型名称" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">描述</label>
+                            <div class="col-sm-7">
+                                <input id="folder-desc" type="text" class="form-control" placeholder="添加类型描述" value="">
+                            </div>
+                        </div>
+                        <input id="folder-id" type="hidden" value="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-cancel">取消</button>
+                    <button type="button" class="btn btn-primary btn-confirm">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{content}
+
+{footer}
+    <script>
+        function queryParams() {
+            
+        }
+
+        function editFolder(obj) {
+            var id = obj.attr('edit');
+            var row = $('#table-folder').bootstrapTable('getRowByUniqueId', id);
+            if (row) {
+                $('#folder-name').val(row.name);
+                $('#folder-desc').val(row.description);
+                $('#folder-id').val(row.id);
+                $('#modal-folder').modal('show');
+            }
+        }
+        function deleteFolder(obj) {
+            if (confirm('确定删除？')) {
+                var folderId = obj.attr('delete');
+                $.post('index.php?c=folder&a=deleteFolder', {folderId: folderId}, function (ret) {
+                    ret = JSON.parse(ret);
+                    if (+ret.code === 0) {
+                        $('#table-folder').bootstrapTable('refresh');
+                    }
+                });
+            }
+        }
+        function actionFormatter(data, row) {
+            var str = ''
+                + '<a title="编辑" onclick="editFolder($(this))" edit="' + row.id + '" class="hover-pointer"><i class="glyphicon glyphicon-edit"></i></a>&nbsp;&nbsp;'
+                + '<a title="删除" onclick="deleteFolder($(this))" delete="' + row.id + '" class="hover-pointer"><i class="glyphicon glyphicon-remove"></i></a>&nbsp;&nbsp;'
+                + '<a href="index.php?a=project&folder=' + row.id + '" title="查看" class="hover-pointer"><i class="glyphicon glyphicon-list"></i></a>&nbsp;&nbsp;';
+            return str;
+        }
+        $(function () {
+            var modal = $('#modal-folder');
+            var table = $('#table-folder');
+            $('#modal-folder .btn-cancel').click(function () {
+                modal.modal('hide');
+            });
+            $('#modal-folder .btn-confirm').click(function () {
+                var name = $('#folder-name').val();
+                var desc = $('#folder-desc').val();
+                var id = $('#folder-id').val();
+                if (id) {
+                    $.post('index.php?c=folder&a=updateFolder', {id: id, name: name, desc: desc}, function (ret) {
+                        ret = JSON.parse(ret);
+                        if (+ret.code === 0) {
+                            table.bootstrapTable('refresh');
+                            modal.modal('hide');
+                        }
+                    });
+                } else {
+                    $.post('index.php?c=folder&a=addFolder', {name: name, desc: desc}, function (ret) {
+                        ret = JSON.parse(ret);
+                        if (+ret.code === 0) {
+                            table.bootstrapTable('refresh');
+                            modal.modal('hide');
+                        }
+                    });
+                }
+            });
+            $('#add-folder').click(function () {
+                $('#folder-name').val('');
+                $('#folder-desc').val('');
+                $('#folder-id').val('');
+                modal.modal('show');
+            });
+        });
+    </script>
+{footer}

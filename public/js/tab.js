@@ -151,6 +151,9 @@ define(['config', 'lib'], function (config, lib) {
     $('#btn-add-dir').click(function () {
         $('#dir-name').data('fileId', 0);
         $('#dir-name').val('');
+        // 隐藏不需要的控件
+        $('#edit-desc').hide();
+        $('#edit-folder').closest('.form-group').hide();
         $('#modal-add-dir .modal-title').text('添加目录');
         $('#modal-add-dir').modal('show');
     });
@@ -170,13 +173,16 @@ define(['config', 'lib'], function (config, lib) {
                 // 更新项目名称
                 var proId = $('#pro-id').val();
                 var proDesc = $('#edit-desc textarea').val();
-                $.post('index.php?a=updateProName', {proId: proId, proName: dirName, proDesc: proDesc}, function (ret) {
+                var proFolder = $('#edit-folder').val();
+                $.post('index.php?a=updateProName', {proId: proId, proName: dirName, proDesc: proDesc, proFolder: proFolder}, function (ret) {
                     ret = JSON.parse(ret);
                     if (ret.code === 0) {
                         renderBrowser(-1);
                         $('#pro-name').val(dirName);
                         $('#edit-desc textarea').val(proDesc);
                         $('#pro-desc').val(proDesc);
+                        $('#edit-folder').val(proFolder);
+                        $('#pro-folder').val(proFolder);
                         $('#modal-add-dir').modal('hide');
                     }
                 });
@@ -234,9 +240,12 @@ define(['config', 'lib'], function (config, lib) {
             // 更新项目名称
             $('#modal-add-dir .modal-title').text('修改项目名称');
             $('#edit-desc').show();
+            $('#edit-folder').closest('.form-group').show();
             $('#edit-desc textarea').val($('#pro-desc').val());
+            $('#edit-folder').val($('#pro-folder').val());
         } else {
             $('#edit-desc').hide();
+            $('#edit-folder').closest('.form-group').hide();
             $('#modal-add-dir .modal-title').text('修改文件名');
         }
         $('#dir-name').val(file[0].text);
@@ -452,6 +461,7 @@ define(['config', 'lib'], function (config, lib) {
             }
         }
     }
+    /*
     // 双击
     function dbSetTab(tab) {
         // 生成input
@@ -461,6 +471,7 @@ define(['config', 'lib'], function (config, lib) {
             + '</li>';
         tab.html(inputStr);
     }
+    */
 
     function makeNewTab(fileName) {
         var aStr = ''

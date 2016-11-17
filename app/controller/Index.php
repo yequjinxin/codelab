@@ -27,16 +27,11 @@ class Index extends \system\BaseController {
         $this->project();
     }
 
-    protected function getUserInfo() {
-        $typeId = $this->user['id'];
-        $user = $this->db->find("select * from user where type='weibo' and type_id='$typeId' and status not in (0,9)");
-        return $user;
-    }
-
     function project() {
         if (!isset($_POST['subFlag'])) {
             $pagerNo = isset($_GET['pager']) ? intval($_GET['pager']) : 1;
             $proType = isset($_GET['type']) ? $_GET['type'] : '';
+            $folder = isset($_GET['folder']) ? $_GET['folder'] : '';
             $proPerPage = 10; // 每页显示几条记录
             $offset = ($pagerNo - 1) * $proPerPage;
 
@@ -47,7 +42,12 @@ class Index extends \system\BaseController {
             } else {
                 $typeStr = '';
             }
-            $where = "where user='$userId' {$typeStr} and status=1";
+            if (!empty($folder)) {
+                $folderStr = "and folder='$folder'";
+            } else {
+                $folderStr = '';
+            }
+            $where = "where user='$userId' {$typeStr} {$folderStr} and status=1";
             $proList = $this->db->find("select id,name,type,description,user,update_time from project
                 $where order by update_time limit $offset,$proPerPage");
 
@@ -81,24 +81,27 @@ class Index extends \system\BaseController {
                 'totalPages' => $totalPages,
             );
 
+            $folderList = $this->db->find("select * from folder where uid='$userId' and status=1");
             $this->display(
                 'project',
                 array(
                    'proList' => $proList,
                    'pagerInfo' => $pagerInfo,
                    'proType' => $this->proType,
+                   'folderList' => $folderList,
                 )
             );
         } else {
             $proName = isset($_POST['name']) ? trim($_POST['name']) : '';
             $proType = isset($_POST['type']) ? trim($_POST['type']) : '';
+            $proFolder = isset($_POST['folder']) ? intval($_POST['folder']) : 0;
             $proDesc = isset($_POST['desc']) ? trim($_POST['desc']) : '';
             $now = date('Y-m-d H:i:s');
             // 生成项目记录
             $userInfo = $this->getUserInfo();
             $userId = isset($userInfo[0]['id']) ? $userInfo[0]['id'] : 0;
-            $id = $this->db->add("insert into project(name,type,status,user,description,create_time,update_time)
-                values('$proName','$proType',1,'$userId','$proDesc','$now','$now')");
+            $id = $this->db->add("insert into project(name,type,folder,status,user,description,create_time,update_time)
+                values('$proName','$proType','$proFolder',1,'$userId','$proDesc','$now','$now')");
             if (!empty($id)) {
                 $this->redirect('index.php?a=main&pro_id=' . $id);
             } else {
@@ -114,7 +117,7 @@ class Index extends \system\BaseController {
         $proId = isset($_GET['pro_id']) ? intval($_GET['pro_id']) : '';
 
         // 根据proId查询name,type
-        $proInfo = $this->db->find("select name,type,description from project where id='$proId'");
+        $proInfo = $this->db->find("select name,type,folder,description from project where id='$proId'");
         if (!empty($proInfo)) {
             $proInfo = $proInfo[0];
         } else {
@@ -123,15 +126,21 @@ class Index extends \system\BaseController {
         $proName = $proInfo['name'];
         $proType = $proInfo['type'];
         $proDesc = $proInfo['description'];
+        $proFolder = $proInfo['folder'];
 
+        $userInfo = $this->getUserInfo();
+        $userId = isset($userInfo[0]['id']) ? $userInfo[0]['id'] : 0;
+        $folderList = $this->db->find("select * from folder where uid='$userId'");
         $this->display(
             'main',
             array(
                 'proId' => $proId,
                 'proName' => $proName,
                 'proType' => $proType,
+                'proFolder' => $proFolder,
                 'proDesc' => $proDesc,
                 'langOption' => $this->langOption[$proType],
+                'folderList' => $folderList,
             )
         );
     }
@@ -188,7 +197,9 @@ class Index extends \system\BaseController {
         $id = isset($_POST['proId']) ? $_POST['proId'] : 0;
         $name = isset($_POST['proName']) ? $_POST['proName'] : '';
         $desc = isset($_POST['proDesc']) ? $_POST['proDesc'] : '';
-        $ret = $this->db->update("update project set name='$name',description='$desc' where id='$id'");
+        $folder = isset($_POST['proFolder']) ? $_POST['proFolder'] : 0;
+
+        $ret = $this->db->update("update project set name='$name',folder='$folder',description='$desc' where id='$id'");
         if ($ret) {
             $code = 0;
             $msg = '';
@@ -383,7 +394,7 @@ class Index extends \system\BaseController {
         foreach ($fileList as $k => $v) {
             if ($v['id'] == $parentId) {
                 $ret[] = $v['name'];
-                $retParent = $this->getFIleListById($fileList, $v['parentId']);
+                $retParent = $this->getFIleListById($fileList, $v['parent_id']);
                 if (!empty($retParent)) {
                     $ret = array_merge($ret, $retParent);
                 }
@@ -402,7 +413,7 @@ class Index extends \system\BaseController {
         $proName = isset($_POST['proName']) ? trim($_POST['proName']) : '';
         $parentId = isset($_POST['parentId']) ? intval($_POST['parentId']) : 0;
 
-        $fileList = $this->db->find("select * from file where pro_id='$proId'");
+        $fileList = $this->db->find("select * from file where pro_id='$proId' and status=1");
         $filePath = $this->getFIleListById($fileList, $parentId);
         array_unshift($filePath, $fileName);
         $identify = $proName . '_' . $proId;

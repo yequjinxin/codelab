@@ -36,7 +36,8 @@ class File {
         foreach ($filePath as $v) {
             $dir .= '/' . $v;
         }
-        file_put_contents($dir, $content);
+        // file_put_contents($dir, $content);
+        self::writeData($dir, $content);
     }
 }
 
