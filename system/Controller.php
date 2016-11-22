@@ -27,12 +27,20 @@ class Controller {
     // 目前只有微博
     function checkLogin() {
         $token = isset($_SESSION['token']) ? $_SESSION['token'] : '';
-        $loginUrl['weibo'] = \app\lib\Login::getWeiboUrl();
+
         $loginType = 'weibo';
         if (empty($token)) {
             $user = '';
+            $loginUrl['weibo'] = \app\lib\Login::getWeiboUrl();
         } else {
-            $user = \app\lib\Login::getWeiboUser();
+            if (empty($_SESSION['user'])) {
+                $user = \app\lib\Login::getWeiboUser();
+                $userSeri = serialize($user);
+                $_SESSION['user'] = $userSeri;
+            } else {
+                $user = unserialize($_SESSION['user']);
+            }
+            $loginUrl['weibo'] = '';
         }
         return array('user' => $user, 'loginUrl' => $loginUrl, 'loginType' => $loginType);
     }
