@@ -37,6 +37,13 @@ class User extends \system\Controller {
                         values('weibo','$userId','$name','$image','$url',1)");
                     if (!$res) {
                         show_error('db error:' . $this->db->error(), '用户信息保存错误');
+                    } else {
+                        $now = date('Y-m-d H:i:s');
+                        $sql = "insert into folder (uid,name,status,description,create_time) values ('$res','default',1,'','$now')";
+                        $folderRes = $this->db->add($sql);
+                        if (!$folderRes) {
+                            show_error('db error:' . $this->db->error(), 'folder add error');
+                        }
                     }
                 }
                 $this->redirect('index.php');
