@@ -11,7 +11,7 @@
                 <div style="display:inline-block;margin-right: 20px;">
                     <select id="search-type" class="form-control">
                         <option value="">全部</option>
-                        <?php foreach ($proType as $v) { ?>
+                        <?php foreach ((empty($proType) ? array() : $proType) as $v) { ?>
                         <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
                         <?php } ?>
                     </select>
@@ -20,7 +20,7 @@
                 <div style="display:inline-block">
                     <select id="search-folder" class="form-control">
                         <option value="">全部</option>
-                        <?php foreach ($folderList as $v) { ?>
+                        <?php foreach ((empty($folderList) ? array() : $folderList) as $v) { ?>
                         <option value="<?php echo $v['id']; ?>"><?php echo $v['name']; ?></option>
                         <?php } ?>
                     </select>
@@ -53,7 +53,7 @@
                 <div class="panel panel-default">
                 <!-- <div class="panel-heading">项目列表</div> -->
                     <ul class="list-group">
-                        <?php foreach ($proList as $k => $v) { ?>
+                        <?php foreach ((empty($proList) ? array() : $proList) as $k => $v) { ?>
                         <li class="list-group-item data-title">
                             <a href="index.php?a=main&pro_id=<?php echo $v['id']; ?>"><?php echo $v['name'] ?>
                                 <span class="data-time"><?php echo $this->user['screen_name']; ?> 更新于 <?php echo substr($v['update_time'], 5); ?></span>
@@ -83,7 +83,7 @@
                                 }
                             ?>
                             <?php
-                                foreach ($pagerInfo['pagerList'] as $v) {
+                                foreach ((empty($pagerInfo['pagerList']) ? array() : $pagerInfo['pagerList']) as $v) {
                                     $classStr = '';
                                     if ($pagerInfo['pagerNo'] === $v) {
                                         $classStr = 'class="active"';
@@ -134,7 +134,7 @@
                                 <label class="col-sm-3 control-label">项目类型</label>
                                 <div class="col-sm-4">
                                     <select name="type" class="form-control">
-                                        <?php foreach ($proType as $v) { ?>
+                                        <?php foreach ((empty($proType) ? array() : $proType) as $v) { ?>
                                         <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
                                         <?php } ?>
                                     </select>
@@ -144,7 +144,7 @@
                                 <label class="col-sm-3 control-label">自定义类型</label>
                                 <div class="col-sm-4">
                                     <select name="folder" class="form-control">
-                                        <?php foreach ($folderList as $v) { ?>
+                                        <?php foreach ((empty($folderList) ? array() : $folderList) as $v) { ?>
                                         <option value="<?php echo $v['id']; ?>"><?php echo $v['name']; ?></option>
                                         <?php } ?>
                                     </select>
