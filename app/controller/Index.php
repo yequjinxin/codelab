@@ -324,9 +324,9 @@ class Index extends \system\BaseController {
         $ret = system($execStr);
         if ($ret !== false) {
             ob_clean();
-            echo json_encode(array(code => 0, 'msg' => ''));
+            echo json_encode(array('code' => 0, 'msg' => ''));
         } else {
-            echo json_encode(array(code => 1, 'msg' => 'stop failed'));
+            echo json_encode(array('code' => 1, 'msg' => 'stop failed'));
         }
     }
 
