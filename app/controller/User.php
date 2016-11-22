@@ -3,7 +3,7 @@ namespace app;
 
 class User extends \system\Controller {
     function login() {
-        $this->display('base', array('loginUrl' => $this->loginUrl));
+        $this->display('project', array('loginUrl' => $this->loginUrl));
     }
 
     /**
