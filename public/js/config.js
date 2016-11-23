@@ -34,13 +34,14 @@ define([], function () {
             case 'html':
                 str = '<!DOCTYPE html>'
                     + '\n<html lang="en">'
-                    + '\n<head>'
-                    +     '\n    <meta charset="utf-8">'
-                    +     '\n    <title></title>'
-                    + '\n</head>'
-                    + '\n<body>'
-
-                    + '\n</body>'
+                    + '\n  <head>'
+                    + '\n    <meta charset="utf-8">'
+                    + '\n    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">'
+                    + '\n    <meta http-equiv="x-ua-compatible" content="ie=edge">'
+                    + '\n    <title></title>'
+                    + '\n  </head>'
+                    + '\n  <body>'
+                    + '\n  </body>'
                     + '\n</html>';
                 break;
             case 'js':
