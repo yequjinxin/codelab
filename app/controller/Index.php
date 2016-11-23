@@ -428,8 +428,9 @@ class Index extends \system\BaseController {
             // update
             $ret = $this->db->update("update file set parent_id='$parentId',content='$content',name='$fileName',update_time='$now' where id='$id'");
         }
+        $proRet = $this->db->update("update project set update_time='$now' where id='$proId'");
         $arr = array();
-        if ($ret) {
+        if ($ret && $proRet) {
             $arr = array('code' => 0, 'id' => $ret);
         } else {
             $arr = array('code' => 1);
