@@ -59,6 +59,7 @@ class User extends \system\Controller {
      */
     function logout() {
         unset($_SESSION['token']);
+        unset($_SESSION['user']);
         $this->redirect('index.php');
     }
 }
