@@ -3,10 +3,13 @@ namespace system;
 
 class PDO {
     static $db = null;
-    public $conn = null;
+    public $connRead = null;
+    public $connWrite = null;
     private function __construct() {
-        $config = get_config()['db']['mysql'];
-        $this->conn = new \PDO($config['dsn'], $config['user'], $config['pwd']);
+        $configRead = get_config()['db']['mysql']['read'];
+        $configWrite = get_config()['db']['mysql']['write'];
+        $this->connRead = new \PDO($configRead['dsn'], $configRead['user'], $configRead['pwd']);
+        $this->connWrite = new \PDO($configWrite['dsn'], $configWrite['user'], $configWrite['pwd']);
     }
 
     static public function getInstance() {
@@ -18,7 +21,7 @@ class PDO {
 
     function find($sql) {
         $data = array();
-        $query = $this->conn->query($sql);
+        $query = $this->connRead->query($sql);
         while ($row = $query->fetch()) {
             $data[] = $row;
         }
@@ -26,9 +29,9 @@ class PDO {
     }
 
     function add($sql) {
-        $res = $this->conn->exec($sql);
+        $res = $this->connWrite->exec($sql);
         if ($res) {
-            $id = $this->conn->lastInsertId();
+            $id = $this->connWrite->lastInsertId();
         } else {
             $id = false;
         }
@@ -36,11 +39,11 @@ class PDO {
     }
 
     function error() {
-        return $this->conn->errorInfo()[2];
+        return $this->connWrite->errorInfo()[2];
     }
 
     function update($sql) {
-        $res = $this->conn->exec($sql);
+        $res = $this->connWrite->exec($sql);
         return $res;
     }
 }
