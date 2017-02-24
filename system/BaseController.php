@@ -29,7 +29,7 @@ class BaseController extends Controller {
 
     protected function checkProject() {
         if ((empty($_GET['c']) || strtolower($_GET['c']) === 'index')
-            && strtolower($_GET['a']) === 'main' || strtolower($_GET['a']) === 'getCodes') {
+            && (strtolower($_GET['a']) === 'main' || strtolower($_GET['a']) === 'getcodes')) {
             // 判断项目是否公开
             $id = empty($_GET['pro_id']) ? 0 : $_GET['pro_id'];
             $ret = $this->db->find("select * from project where id=$id");
