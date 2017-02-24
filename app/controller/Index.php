@@ -117,7 +117,7 @@ class Index extends \system\BaseController {
         $proId = isset($_GET['pro_id']) ? intval($_GET['pro_id']) : '';
 
         // 根据proId查询name,type
-        $proInfo = $this->db->find("select name,type,folder,description from project where id='$proId'");
+        $proInfo = $this->db->find("select name,type,folder,description,is_open from project where id='$proId'");
         if (!empty($proInfo)) {
             $proInfo = $proInfo[0];
         } else {
@@ -127,6 +127,7 @@ class Index extends \system\BaseController {
         $proType = $proInfo['type'];
         $proDesc = $proInfo['description'];
         $proFolder = $proInfo['folder'];
+        $isOpen = $proInfo['is_open'];
 
         $userInfo = $this->getUserInfo();
         $userId = isset($userInfo[0]['id']) ? $userInfo[0]['id'] : 0;
@@ -139,6 +140,7 @@ class Index extends \system\BaseController {
                 'proType' => $proType,
                 'proFolder' => $proFolder,
                 'proDesc' => $proDesc,
+                'isOpen' => $isOpen,
                 'langOption' => $this->langOption[$proType],
                 'folderList' => $folderList,
             )
@@ -198,8 +200,9 @@ class Index extends \system\BaseController {
         $name = isset($_POST['proName']) ? $_POST['proName'] : '';
         $desc = isset($_POST['proDesc']) ? $_POST['proDesc'] : '';
         $folder = isset($_POST['proFolder']) ? $_POST['proFolder'] : 0;
+        $isOpen = isset($_POST['isOpen']) ? $_POST['isOpen'] : 0;
 
-        $ret = $this->db->update("update project set name='$name',folder='$folder',description='$desc' where id='$id'");
+        $ret = $this->db->update("update project set name='$name',folder='$folder',description='$desc',is_open=$isOpen where id='$id'");
         if ($ret) {
             $code = 0;
             $msg = '';

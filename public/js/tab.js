@@ -174,15 +174,17 @@ define(['config', 'lib'], function (config, lib) {
                 var proId = $('#pro-id').val();
                 var proDesc = $('#edit-desc textarea').val();
                 var proFolder = $('#edit-folder').val();
-                $.post('index.php?a=updateProName', {proId: proId, proName: dirName, proDesc: proDesc, proFolder: proFolder}, function (ret) {
+                var isOpen = $('#is-open').val();
+                $.post('index.php?a=updateProName', {proId: proId, proName: dirName, proDesc: proDesc, proFolder: proFolder, isOpen: isOpen}, function (ret) {
                     ret = JSON.parse(ret);
                     if (ret.code === 0) {
                         renderBrowser(-1);
                         $('#pro-name').val(dirName);
-                        $('#edit-desc textarea').val(proDesc);
+                        // $('#edit-desc textarea').val(proDesc);
                         $('#pro-desc').val(proDesc);
-                        $('#edit-folder').val(proFolder);
+                        // $('#edit-folder').val(proFolder);
                         $('#pro-folder').val(proFolder);
+                        $('#pro-is-open').val(isOpen);
                         $('#modal-add-dir').modal('hide');
                     }
                 });
@@ -241,11 +243,14 @@ define(['config', 'lib'], function (config, lib) {
             $('#modal-add-dir .modal-title').text('修改项目名称');
             $('#edit-desc').show();
             $('#edit-folder').closest('.form-group').show();
+            $('#is-open').closest('.form-group').show();
             $('#edit-desc textarea').val($('#pro-desc').val());
             $('#edit-folder').val($('#pro-folder').val());
+            $('#is-open').val($('#pro-is-open').val());
         } else {
             $('#edit-desc').hide();
             $('#edit-folder').closest('.form-group').hide();
+            $('#is-open').closest('.form-group').hide();
             $('#modal-add-dir .modal-title').text('修改文件名');
         }
         $('#dir-name').val(file[0].text);
