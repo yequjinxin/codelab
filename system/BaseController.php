@@ -13,7 +13,7 @@ class BaseController extends Controller {
         }
         $this->isOpen = false;
         if (!$this->isLogin) {
-            if (checkProject()) {
+            if ($this->checkProject()) {
                 $this->isOpen = true;
             } else {
                 $this->redirect('index.php?c=user&a=login');
