@@ -77,7 +77,7 @@
     </nav>
 
     <div class="data-content">
-        <?php if ($this->isLogin) { ?>
+        <?php if ($this->isLogin || $this->isOpen) { ?>
         {content}
         <?php } else { ?>
         <div class="tip">
