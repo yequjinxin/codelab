@@ -45,7 +45,7 @@
         <div class="row">
             <!-- <div class="col-lg-offset-1 col-lg-2 col-xs-4"> -->
             <div class="col-lg-2 col-xs-4">
-                <select id="lang" class="form-control">
+                <select id="lang" class="form-control" <?php if ($this->isOpen) { echo 'disabled="disabled"'; } ?>>
                     <?php foreach ($langOption as $v) { ?>
                     <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
                     <?php } ?>
@@ -73,13 +73,13 @@
                         <span class="glyphicon glyphicon-refresh"></span>
                     </button>
                      -->
-                    <button id="btn-add-dir" type="button" class="btn btn-sm btn-default" title="添加目录">
+                    <button id="btn-add-dir" type="button" class="btn btn-sm btn-default" title="添加目录" <?php if ($this->isOpen) { echo 'disabled="disabled"'; } ?>>
                         <span class="glyphicon glyphicon-plus"></span>
                     </button>
-                    <button id="btn-edit-file" type="button" class="btn btn-sm btn-default" title="编辑文件名">
+                    <button id="btn-edit-file" type="button" class="btn btn-sm btn-default" title="编辑文件名" <?php if ($this->isOpen) { echo 'disabled="disabled"'; } ?>>
                         <span class="glyphicon glyphicon-edit"></span>
                     </button>
-                    <button id="btn-del-file" type="button" class="btn btn-sm btn-default" title="删除文件">
+                    <button id="btn-del-file" type="button" class="btn btn-sm btn-default" title="删除文件" <?php if ($this->isOpen) { echo 'disabled="disabled"'; } ?>>
                         <span class="glyphicon glyphicon-remove"></span>
                     </button>
                 </div>
@@ -106,7 +106,7 @@
                 <div class="transparent_class mylayer"><span></span></div>
                 <ul id="code-tab" class="nav nav-tabs">
                     <li id="code-add">
-                        <button type="button" class="btn btn-default">添加</button>   
+                        <button type="button" class="btn btn-default" <?php if ($this->isOpen) { echo 'disabled="disabled"'; } ?>>添加</button>   
                     </li>
                 </ul>
                 <textarea id="code" style="display:none;"></textarea>
