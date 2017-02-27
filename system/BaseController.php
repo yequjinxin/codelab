@@ -32,7 +32,6 @@ class BaseController extends Controller {
             && (strtolower($_GET['a']) === 'main' || strtolower($_GET['a']) === 'getcodes')) {
             // 判断项目是否公开
             $id = empty($_GET['pro_id']) ? 0 : $_GET['pro_id'];
-            $id = empty($id) ? 0 : $_POST['proId'];
             if (empty($id)) {
                 $id = isset($_POST['proId']) ? $_POST['proId'] : 0;
             }
