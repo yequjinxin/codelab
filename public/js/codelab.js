@@ -70,7 +70,7 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
                                     $('#btn-run').hide();
                                     $('#btn-stop').show();
                                     $('#div-btn-run').show();
-                                }, 3000);
+                                }, 5000);
                             } else {
                                 containerSrc = ret.data;
                                 window.open(containerSrc);
