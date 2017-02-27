@@ -91,7 +91,7 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
         $('#div-btn-run').hide();
         var proId = $('#pro-id').val();
         var proName = $('#pro-name').val();
-        $.post('index.php?a=stopContainer', {proId, proId, proName: proName}, function (ret) {
+        $.post('index.php?a=stopContainer', {proId: proId, proName: proName}, function (ret) {
             ret = JSON.parse(ret);
             if (+ret.code === 0) {
                 $('#btn-stop').button('reset');
