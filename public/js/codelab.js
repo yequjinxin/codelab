@@ -104,7 +104,7 @@ define(['lib', 'config', 'tab'], function (lib, config, tab) {
     });
 
     $(window).bind('beforeunload', function () {
-        $.post('index.php?a=stopContainer', {proId, proId, proName: proName});
+        $.post('index.php?a=stopContainer', {proId: proId, proName: proName});
     });
 
     // 放大
