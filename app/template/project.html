@@ -184,7 +184,7 @@
                 var type = $('#search-type').val();
                 var folder = $('#search-folder').val();
                 var open = $('#search-open').val();
-                var paramStr = "<?php echo 'pager=' . $pagerInfo['pagerNo']; ?>";
+                var paramStr = "<?php echo '&pager=' . $pagerInfo['pagerNo']; ?>";
                 if (type !== '') {
                     paramStr += '&type=' + type;
                 }
