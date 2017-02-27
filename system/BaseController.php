@@ -33,6 +33,9 @@ class BaseController extends Controller {
             // 判断项目是否公开
             $id = empty($_GET['pro_id']) ? 0 : $_GET['pro_id'];
             $id = empty($id) ? 0 : $_POST['proId'];
+            if (empty($id)) {
+                $id = isset($_POST['proId']) ? $_POST['proId'] : 0;
+            }
             $ret = $this->db->find("select * from project where id=$id");
             if (!empty($ret) && $ret[0]['is_open']) {
                 return true;
