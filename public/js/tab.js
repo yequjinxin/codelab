@@ -39,7 +39,7 @@ define(['config', 'lib'], function (config, lib) {
                 e.setAttribute("aria-label", e.title);
                 return e;
             },
-            readOnly: $('#pro-is-open').val(),
+            readOnly: +$('#pro-is-open').val() === 1 ? true : false,
         });
         return mirror;
     }
