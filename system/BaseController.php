@@ -20,7 +20,7 @@ class BaseController extends Controller {
             if ($this->isLogin) {
                 $user = $this->getUserInfo();
                 // 访问项目详情页
-                if (!empty($this->projectInfo) && $this->projectInfo['user'] != $user['id']) {
+                if (!empty($this->projectInfo) && ($this->projectInfo[0]['user'] != $user['id'])) {
                     $this->isOwned = false;
                     $this->redirect('index.php?c=user&a=login');
                 }
