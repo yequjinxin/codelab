@@ -13,16 +13,16 @@ class BaseController extends Controller {
             $this->isLogin = true;
         }
         $this->isOpen = false;
-        $this->isOwned = true;
+        $this->isDeny = false;
         if ($this->checkProject()) {
             $this->isOpen = true;
         } else {
             if ($this->isLogin) {
                 $user = $this->getUserInfo();
                 // 访问项目详情页
-                if (!empty($this->projectInfo) && ($this->projectInfo[0]['user'] != $user[0]['id'])) {
-                    $this->isOwned = false;
-                    $this->redirect('index.php?c=user&a=login');
+                if (!empty($this->projectInfo[0]) && ($this->projectInfo[0]['user'] != $user[0]['id'])) {
+                    $this->isDeny = true;
+                    $this->redirect('index.php?c=user&a=login&deny=1');
                 }
             } else {
                 $this->redirect('index.php?c=user&a=login');
