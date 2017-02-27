@@ -17,12 +17,19 @@
                     </select>
                 </div>
                 <!-- <span>自定义类型:</span>  -->
-                <div style="display:inline-block">
+                <div style="display:inline-block;margin-right: 20px;">
                     <select id="search-folder" class="form-control">
                         <option value="">全部</option>
                         <?php foreach ((empty($folderList) ? array() : $folderList) as $v) { ?>
                         <option value="<?php echo $v['id']; ?>"><?php echo $v['name']; ?></option>
                         <?php } ?>
+                    </select>
+                </div>
+                <div style="display:inline-block;">
+                    <select id="search-open" class="form-control">
+                        <option value="">全部</option>
+                        <option value="1">私有</option>
+                        <option value="0">公开</option>
                     </select>
                 </div>
                 <button id="create-pro" type="button" class="btn btn-primary btn-sm float-right" title="添加项目">
@@ -176,12 +183,16 @@
             function refreshProList() {
                 var type = $('#search-type').val();
                 var folder = $('#search-folder').val();
-                var paramStr = '';
+                var open = $('#search-open').val();
+                var paramStr = "<?php echo 'pager=' . $pagerInfo['pagerNo']; ?>";
                 if (type !== '') {
                     paramStr += '&type=' + type;
                 }
-                if (folder != '') {
+                if (folder !== '') {
                     paramStr += '&folder=' + folder;
+                }
+                if (open !== '') {
+                    paramStr += '&open=' + open;
                 }
                 window.location.href = 'index.php?a=project' + paramStr;
             }
@@ -191,6 +202,9 @@
             $('#search-folder').change(function () {
                 refreshProList();
             }).val(<?php echo empty($_GET['folder']) ? '' : "'{$_GET['folder']}'"; ?>);
+            $('#search-open').change(function () {
+                refreshProList();
+            }).val(<?php echo !isset($_GET['open']) ? '' : "'{$_GET['open']}'"; ?>);
         });
     </script>
 {footer}

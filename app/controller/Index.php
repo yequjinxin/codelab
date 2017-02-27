@@ -32,6 +32,7 @@ class Index extends \system\BaseController {
             $pagerNo = isset($_GET['pager']) ? intval($_GET['pager']) : 1;
             $proType = isset($_GET['type']) ? $_GET['type'] : '';
             $folder = isset($_GET['folder']) ? $_GET['folder'] : '';
+            $open = isset($_GET['open']) ? $_GET['open'] : '';
             $proPerPage = 10; // 每页显示几条记录
             $offset = ($pagerNo - 1) * $proPerPage;
 
@@ -47,7 +48,12 @@ class Index extends \system\BaseController {
             } else {
                 $folderStr = '';
             }
-            $where = "where user='$userId' {$typeStr} {$folderStr} and status=1";
+            if ($open !== '') {
+                $openStr = "and is_open=$open";
+            } else {
+                $openStr = ''; 
+            }
+            $where = "where user='$userId' {$typeStr} {$folderStr} {$openStr} and status=1";
             $proList = $this->db->find("select id,name,type,description,user,update_time from project
                 $where order by update_time limit $offset,$proPerPage");
 
