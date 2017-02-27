@@ -52,6 +52,9 @@ define(['config', 'lib'], function (config, lib) {
         },
         'Ctrl-J': 'toMatchingTag',
         'Ctrl-S': function (cm) {
+            if ($('#pro-is-open').val()) {
+                return false;
+            }
             // 保存当前文件
             var fileName = $('#code-tab li.active a .file-name').data('fileName');
             var id = 0;
