@@ -334,62 +334,62 @@ class Index extends \system\BaseController {
     }
 
     function runCode() {
-        $userInfo = $this->getUserInfo();
-        if (isset($userInfo[0]['status']) && ((int)$userInfo[0]['status'] === 2 || (int)$userInfo[0]['status'] === 1)) {
-            $codes = isset($_POST['codes']) ? json_decode($_POST['codes'], true) : '';
-            $proId = isset($_POST['proId']) ? intval($_POST['proId']) : 0;
-            $proName = isset($_POST['proName']) ? trim($_POST['proName']) : '';
-            $type = isset($_POST['type']) ? trim($_POST['type']) : '';
+        // $userInfo = $this->getUserInfo();
+        // if (isset($userInfo[0]['status']) && (int)$userInfo[0]['status'] === 2 || $this->isOpen) {
+        $codes = isset($_POST['codes']) ? json_decode($_POST['codes'], true) : '';
+        $proId = isset($_POST['proId']) ? intval($_POST['proId']) : 0;
+        $proName = isset($_POST['proName']) ? trim($_POST['proName']) : '';
+        $type = isset($_POST['type']) ? trim($_POST['type']) : '';
 
-            $identifier = $proName . '_' . $proId;
-            $dir = ROOT . "app/sandbox/{$identifier}/source/";
-            // 根据codes生成文件并执行
-            if (file_exists($dir)) {
-                // 删除目录内的所有内容
-                \app\lib\File::deleteDir($dir);
-            }
-
-            // 代码都是经过转义的,因此这里需要反转义
-            foreach ($codes as $file => $code) {
-                \app\lib\File::writeData(str_replace('\\', '/', $dir . $file), stripslashes($code));
-            }
-            $url = "sandbox.php?name={$identifier}&type={$type}";
-            if ($type === 'php') {
-                $execStr = "docker run -v " . ROOT . "app/sandbox/{$identifier}:/root/data/codelab/{$identifier} --name {$identifier} yequjinxin/php:v1.00 php /root/script/exec_code.php {$identifier}";
-                $ret = system($execStr);
-                if ($ret !== false) {
-                    // 清空container
-                    // system("docker stop $identifier");
-                    system("docker rm $identifier");
-                    ob_clean();
-                    echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
-                } else {
-                    echo json_encode(array('code' => 2, 'msg' => 'run error'));
-                }
-            } else if ($type === 'html') {
-                echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
-            } else if ($type === 'c' || $type === 'python') {
-                $gateone = $this->db->find('select id,port from gateone where status=0 limit 1');
-                if (empty($gateone[0])) {
-                    echo json_encode(array('code' => 3, 'msg' => 'no more OS resource'));
-                    exit;
-                }
-                $port = $gateone[0]['port'];
-                $execStr = "docker run -v " . ROOT . "app/sandbox/{$identifier}/source:/root/{$proName} -d -p $port:$port --name {$identifier} yequjinxin/gateone:v1.00 /bin/sh -c '/usr/local/bin/run.sh $port'";
-                $ret = system($execStr);
-                if ($ret !== false) {
-                    ob_clean();
-                    $now = date('Y-m-d H:i:s');
-                    $id = $gateone[0]['id'];
-                    $this->db->update("update gateone set status=1,proId='$proId',begin_time='$now' where id='$id'");
-                    echo json_encode(array('code' => 0, 'msg' => '', 'port' => $port));
-                } else {
-                    echo json_encode(array('code' => 2, 'msg' => 'run error'));
-                }
-            }
-        } else {
-            echo json_encode(array('code' => 1, 'msg' => '当前用户没有运行权限'));
+        $identifier = $proName . '_' . $proId;
+        $dir = ROOT . "app/sandbox/{$identifier}/source/";
+        // 根据codes生成文件并执行
+        if (file_exists($dir)) {
+            // 删除目录内的所有内容
+            \app\lib\File::deleteDir($dir);
         }
+
+        // 代码都是经过转义的,因此这里需要反转义
+        foreach ($codes as $file => $code) {
+            \app\lib\File::writeData(str_replace('\\', '/', $dir . $file), stripslashes($code));
+        }
+        $url = "sandbox.php?name={$identifier}&type={$type}";
+        if ($type === 'php') {
+            $execStr = "docker run -v " . ROOT . "app/sandbox/{$identifier}:/root/data/codelab/{$identifier} --name {$identifier} yequjinxin/php:v1.00 php /root/script/exec_code.php {$identifier}";
+            $ret = system($execStr);
+            if ($ret !== false) {
+                // 清空container
+                // system("docker stop $identifier");
+                system("docker rm $identifier");
+                ob_clean();
+                echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
+            } else {
+                echo json_encode(array('code' => 2, 'msg' => 'run error'));
+            }
+        } else if ($type === 'html') {
+            echo json_encode(array('code' => 0, 'msg' => '', 'data' => $url));
+        } else if ($type === 'c' || $type === 'python') {
+            $gateone = $this->db->find('select id,port from gateone where status=0 limit 1');
+            if (empty($gateone[0])) {
+                echo json_encode(array('code' => 3, 'msg' => 'no more OS resource'));
+                exit;
+            }
+            $port = $gateone[0]['port'];
+            $execStr = "docker run -v " . ROOT . "app/sandbox/{$identifier}/source:/root/{$proName} -d -p $port:$port --name {$identifier} yequjinxin/gateone:v1.00 /bin/sh -c '/usr/local/bin/run.sh $port'";
+            $ret = system($execStr);
+            if ($ret !== false) {
+                ob_clean();
+                $now = date('Y-m-d H:i:s');
+                $id = $gateone[0]['id'];
+                $this->db->update("update gateone set status=1,proId='$proId',begin_time='$now' where id='$id'");
+                echo json_encode(array('code' => 0, 'msg' => '', 'port' => $port));
+            } else {
+                echo json_encode(array('code' => 2, 'msg' => 'run error'));
+            }
+        }
+        // } else {
+        //     echo json_encode(array('code' => 1, 'msg' => '当前用户没有运行权限'));
+        // }
     }
 
     private function getFIleListById($fileList, $parentId) {
