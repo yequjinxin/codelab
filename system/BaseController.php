@@ -2,6 +2,7 @@
 namespace system;
 
 class BaseController extends Controller {
+    private $projectInfo = array();
 
     function __construct() {
         parent::__construct();
@@ -12,9 +13,17 @@ class BaseController extends Controller {
             $this->isLogin = true;
         }
         $this->isOpen = false;
-        if (!$this->isLogin) {
-            if ($this->checkProject()) {
-                $this->isOpen = true;
+        $this->isOwned = true;
+        if ($this->checkProject()) {
+            $this->isOpen = true;
+        } else {
+            if ($this->isLogin) {
+                $user = $this->getUserInfo();
+                // 访问项目详情页
+                if (!empty($this->projectInfo) && $this->projectInfo['user'] != $user['id']) {
+                    $this->isOwned = false;
+                    $this->redirect('index.php?c=user&a=login');
+                }
             } else {
                 $this->redirect('index.php?c=user&a=login');
             }
@@ -22,6 +31,10 @@ class BaseController extends Controller {
     }
 
     protected function getUserInfo() {
+        static $user;
+        if ($user) {
+            return $user;
+        }
         $typeId = isset($this->user['id']) ? $this->user['id'] : 0;
         $user = $this->db->find("select * from user where type='weibo' and type_id='$typeId' and status not in (0,9)");
         return $user;
@@ -37,6 +50,7 @@ class BaseController extends Controller {
                 $id = isset($_POST['proId']) ? $_POST['proId'] : 0;
             }
             $ret = $this->db->find("select * from project where id=$id");
+            $this->projectInfo = $ret;
             if (!empty($ret) && $ret[0]['is_open']) {
                 return true;
             } else {
