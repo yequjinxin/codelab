@@ -335,7 +335,7 @@ class Index extends \system\BaseController {
 
     function runCode() {
         $userInfo = $this->getUserInfo();
-        if (isset($userInfo[0]['status']) && (int)$userInfo[0]['status'] === 2) {
+        if (isset($userInfo[0]['status']) && ((int)$userInfo[0]['status'] === 2 || (int)$userInfo[0]['status'] === 1)) {
             $codes = isset($_POST['codes']) ? json_decode($_POST['codes'], true) : '';
             $proId = isset($_POST['proId']) ? intval($_POST['proId']) : 0;
             $proName = isset($_POST['proName']) ? trim($_POST['proName']) : '';
