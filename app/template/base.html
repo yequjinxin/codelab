@@ -80,7 +80,9 @@
         <?php if ($this->isLogin || $this->isOpen) { ?>
         {content}
         <?php } else if (!$this->isOwned) { ?>
-        <span>该项目你无权访问^^</span>
+        <div class="tip">
+            <span>该项目你无权访问^^</span>
+        </div>
         <?php } else { ?>
         <div class="tip">
             <span>请先登录^^</span>
