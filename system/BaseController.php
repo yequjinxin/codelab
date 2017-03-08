@@ -12,16 +12,21 @@ class BaseController extends Controller {
         } else {
             $this->isLogin = true;
         }
-        $this->isOpen = false;
-        $this->isDeny = false;
+
+        $this->isOpen = false; // 公开访问,不包含指定用户登录访问公开项目
+        $user = $this->getUserInfo();
         if ($this->checkProject()) {
             $this->isOpen = true;
+            // 公开项目有一种情况不能使用公开模式：公开项目所有者访问公开项目
+            if ($this->isLogin) {
+                if (!empty($this->projectInfo[0]) && ($this->projectInfo[0]['user'] == $user[0]['id'])) {
+                    $this->isOpen = false;
+                }
+            }
         } else {
             if ($this->isLogin) {
-                $user = $this->getUserInfo();
-                // 访问项目详情页
+                // 登录访问非自己所有的私有项目
                 if (!empty($this->projectInfo[0]) && ($this->projectInfo[0]['user'] != $user[0]['id'])) {
-                    $this->isDeny = true;
                     $this->redirect('index.php?c=user&a=login&deny=1');
                 }
             } else {
