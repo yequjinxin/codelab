@@ -133,7 +133,6 @@ class Index extends \system\BaseController {
         $proType = $proInfo['type'];
         $proDesc = $proInfo['description'];
         $proFolder = $proInfo['folder'];
-        $isOpen = $proInfo['is_open'];
 
         $userInfo = $this->getUserInfo();
         $userId = isset($userInfo[0]['id']) ? $userInfo[0]['id'] : 0;
@@ -146,7 +145,6 @@ class Index extends \system\BaseController {
                 'proType' => $proType,
                 'proFolder' => $proFolder,
                 'proDesc' => $proDesc,
-                'isOpen' => $isOpen,
                 'langOption' => $this->langOption[$proType],
                 'folderList' => $folderList,
             )
