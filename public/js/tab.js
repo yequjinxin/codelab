@@ -53,7 +53,7 @@ define(['config', 'lib'], function (config, lib) {
         },
         'Ctrl-J': 'toMatchingTag',
         'Ctrl-S': function (cm) {
-            if ($('#pro-is-open').val()) {
+            if (+$('#pro-is-open').val() === 1) {
                 return false;
             }
             // 保存当前文件
@@ -381,7 +381,7 @@ define(['config', 'lib'], function (config, lib) {
         }
         return text;
     }
-    
+
     // 给browser初始化
     function initBrowser(data) {
         $('#browser').treeview({
@@ -432,7 +432,7 @@ define(['config', 'lib'], function (config, lib) {
             }
         });
     }
-    
+
     // 选中browser
     function updateBrowser(fileId) {
         var nodeInfo = $('#browser').treeview('search', [fileId, {ignoreCase: false, exactMatch: true}, 'fileId']);
